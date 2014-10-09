@@ -93,7 +93,6 @@ public class RippleView extends RelativeLayout
         canvasHandler = new Handler();
 
         scaleAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom);
-        scaleAnimation.setDuration(DURATION);
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
@@ -149,25 +148,22 @@ public class RippleView extends RelativeLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event)
     {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        if (!animationRunning)
         {
-            if (!animationRunning)
+            this.startAnimation(scaleAnimation);
+            radiusMax = Math.max(WIDTH, HEIGHT) / 2f;
+            if (isRounded)
             {
-                radiusMax = Math.max(WIDTH, HEIGHT) / 2f;
-                if (isRounded)
-                {
-                    this.x = getMeasuredWidth() / 2;
-                    this.y = getMeasuredHeight() / 2;
-                }
-                else
-                {
-                    this.x = event.getX();
-                    this.y = event.getY();
-                }
-                animationRunning = true;
-                invalidate();
-                this.startAnimation(scaleAnimation);
+                this.x = getMeasuredWidth() / 2;
+                this.y = getMeasuredHeight() / 2;
             }
+            else
+            {
+                this.x = event.getX();
+                this.y = event.getY();
+            }
+            animationRunning = true;
+            invalidate();
         }
 
         return super.onInterceptTouchEvent(event);
