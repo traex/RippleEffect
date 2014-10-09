@@ -34,6 +34,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 /**
@@ -42,16 +45,19 @@ import android.widget.RelativeLayout;
  */
 public class RippleView extends RelativeLayout
 {
+    private int WIDTH;
+    private int HEIGHT;
     private final int FRAME_RATE = 15;
     private final int DURATION = 400;
     private final int PAINT_ALPHA = 90;
     private Handler canvasHandler;
     private boolean isRounded;
-    private float radiusFrame = 0;
+    private float radiusMax = 0;
     private boolean animationRunning = false;
     private int timer = 0;
     private float x = -1;
     private float y = -1;
+    private Animation scaleAnimation;
     private Paint paint;
     private Runnable runnable = new Runnable()
     {
@@ -86,6 +92,8 @@ public class RippleView extends RelativeLayout
         isRounded = typedArray.getBoolean(R.styleable.RippleView_rounded, false);
         canvasHandler = new Handler();
 
+        scaleAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom);
+        scaleAnimation.setDuration(DURATION);
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
@@ -121,12 +129,21 @@ public class RippleView extends RelativeLayout
                 canvas.save();
 
 
-            canvas.drawCircle(x, y, timer * radiusFrame, paint);
+            canvas.drawCircle(x, y, (radiusMax * ((((float) timer * FRAME_RATE)) / DURATION)), paint);
 
             timer++;
             paint.setAlpha((int) (PAINT_ALPHA - (PAINT_ALPHA * ((((float) timer * FRAME_RATE)) / DURATION))));
         }
 
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
+        WIDTH = MeasureSpec.getSize(widthMeasureSpec);
+        HEIGHT = MeasureSpec.getSize(heightMeasureSpec);
+        this.setMeasuredDimension(WIDTH, HEIGHT);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
@@ -136,7 +153,7 @@ public class RippleView extends RelativeLayout
         {
             if (!animationRunning)
             {
-                float radiusMax = Math.max(getMeasuredWidth(), getMeasuredHeight()) / 2;
+                radiusMax = Math.max(WIDTH, HEIGHT) / 2f;
                 if (isRounded)
                 {
                     this.x = getMeasuredWidth() / 2;
@@ -147,13 +164,12 @@ public class RippleView extends RelativeLayout
                     this.x = event.getX();
                     this.y = event.getY();
                 }
-                radiusFrame = radiusMax / FRAME_RATE;
                 animationRunning = true;
                 invalidate();
+                this.startAnimation(scaleAnimation);
             }
         }
 
-        Log.e("RippleVIew", "onIntercept " + event.getAction());
         return super.onInterceptTouchEvent(event);
     }
 }

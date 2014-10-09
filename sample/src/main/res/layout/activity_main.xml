@@ -48,8 +48,8 @@
             android:id="@+id/more"
             android:layout_width="?android:actionBarSize"
             android:layout_height="?android:actionBarSize"
-            android:layout_margin="5dp"
             android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
             ripple:rounded="true">
         <ImageView
             android:layout_width="wrap_content"
@@ -65,6 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_below="@+id/actionbar"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
         android:layout_height="wrap_content">
 
         <TextView
@@ -83,6 +84,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_below="@+id/rect"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         ripple:rounded="true">
 
