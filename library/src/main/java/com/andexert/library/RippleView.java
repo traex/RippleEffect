@@ -83,11 +83,6 @@ public class RippleView extends RelativeLayout
     {
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
         final int rippleColor = typedArray.getColor(R.styleable.RippleView_color, getResources().getColor(R.color.rippelColor));
-        final View view = new View(context);
-        final ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        view.setClickable(true);
-        view.setLayoutParams(layoutParams);
-        this.addView(view);
         isRounded = typedArray.getBoolean(R.styleable.RippleView_rounded, false);
         canvasHandler = new Handler();
 
@@ -137,7 +132,7 @@ public class RippleView extends RelativeLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event)
     {
-        if (event.getAction() == MotionEvent.ACTION_UP)
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
         {
             if (!animationRunning)
             {
@@ -157,16 +152,8 @@ public class RippleView extends RelativeLayout
                 invalidate();
             }
         }
-        else if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_CANCEL)
-            return true;
-        Log.e("RippleVIew", "onIntercept " + event.getAction());
-        return false;
-    }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        Log.e("RippleVIew", "onTouch " + event.getAction());
-        return super.onTouchEvent(event);
+        Log.e("RippleVIew", "onIntercept " + event.getAction());
+        return super.onInterceptTouchEvent(event);
     }
 }
