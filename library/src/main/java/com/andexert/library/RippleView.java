@@ -33,6 +33,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 /**
@@ -42,7 +43,7 @@ import android.widget.RelativeLayout;
 public class RippleView extends RelativeLayout
 {
     private final int FRAME_RATE = 15;
-    private final int DURATION = 500;
+    private final int DURATION = 400;
     private final int PAINT_ALPHA = 90;
     private Handler canvasHandler;
     private boolean isRounded;
@@ -82,6 +83,11 @@ public class RippleView extends RelativeLayout
     {
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
         final int rippleColor = typedArray.getColor(R.styleable.RippleView_color, getResources().getColor(R.color.rippelColor));
+        final View view = new View(context);
+        final ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        view.setClickable(true);
+        view.setLayoutParams(layoutParams);
+        this.addView(view);
         isRounded = typedArray.getBoolean(R.styleable.RippleView_rounded, false);
         canvasHandler = new Handler();
 
@@ -91,6 +97,12 @@ public class RippleView extends RelativeLayout
         paint.setColor(rippleColor);
         paint.setAlpha(PAINT_ALPHA);
         this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+        if (getBackground() == null)
+        {
+            this.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        }
+
     }
 
     @Override
@@ -118,7 +130,6 @@ public class RippleView extends RelativeLayout
 
             timer++;
             paint.setAlpha((int) (PAINT_ALPHA - (PAINT_ALPHA * ((((float) timer * FRAME_RATE)) / DURATION))));
-            Log.e("RippleView", "" + (PAINT_ALPHA - (PAINT_ALPHA * ((((float) timer * FRAME_RATE)) / DURATION))));
         }
 
     }
@@ -126,15 +137,36 @@ public class RippleView extends RelativeLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event)
     {
-        if (!animationRunning)
+        if (event.getAction() == MotionEvent.ACTION_UP)
         {
-            float radiusMax = Math.max(getMeasuredWidth(), getMeasuredHeight());
-            this.x = event.getX();
-            this.y = event.getY();
-            radiusFrame = radiusMax / FRAME_RATE;
-            animationRunning = true;
-            invalidate();
+            if (!animationRunning)
+            {
+                float radiusMax = Math.max(getMeasuredWidth(), getMeasuredHeight()) / 2;
+                if (isRounded)
+                {
+                    this.x = getMeasuredWidth() / 2;
+                    this.y = getMeasuredHeight() / 2;
+                }
+                else
+                {
+                    this.x = event.getX();
+                    this.y = event.getY();
+                }
+                radiusFrame = radiusMax / FRAME_RATE;
+                animationRunning = true;
+                invalidate();
+            }
         }
-        return super.onInterceptTouchEvent(event);
+        else if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_CANCEL)
+            return true;
+        Log.e("RippleVIew", "onIntercept " + event.getAction());
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        Log.e("RippleVIew", "onTouch " + event.getAction());
+        return super.onTouchEvent(event);
     }
 }
