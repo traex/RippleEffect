@@ -51,7 +51,8 @@
             android:layout_height="?android:actionBarSize"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
-            ripple:rounded="true">
+            ripple:rounded="true"
+            ripple:color="@android:color/holo_red_dark">
         <ImageView
             android:layout_width="?android:actionBarSize"
             android:layout_height="?android:actionBarSize"

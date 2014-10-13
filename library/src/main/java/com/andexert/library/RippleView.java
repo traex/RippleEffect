@@ -35,6 +35,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -64,6 +65,7 @@ public class RippleView extends RelativeLayout
     private Animation scaleAnimation;
     private Paint paint;
     private Bitmap originBitmap;
+    private int rippleColor;
     private Runnable runnable = new Runnable()
     {
         @Override
@@ -93,7 +95,7 @@ public class RippleView extends RelativeLayout
     private void init(final Context context, final AttributeSet attrs)
     {
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
-        final int rippleColor = typedArray.getColor(R.styleable.RippleView_color, getResources().getColor(R.color.rippelColor));
+        rippleColor = typedArray.getColor(R.styleable.RippleView_color, getResources().getColor(R.color.rippelColor));
         isRounded = typedArray.getBoolean(R.styleable.RippleView_rounded, false);
         canvasHandler = new Handler();
 
@@ -133,12 +135,12 @@ public class RippleView extends RelativeLayout
             else
                 canvasHandler.postDelayed(runnable, FRAME_RATE);
 
-            if (timer == 0)
+            if (timer == 2  )
                 canvas.save();
 
-                    canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
+            canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
 
-                paint.setColor(getResources().getColor(android.R.color.holo_red_light));
+            paint.setColor(getResources().getColor(android.R.color.holo_red_light));
 
             if (originBitmap != null && (((float) timer * FRAME_RATE) / DURATION) > 0.4f)
             {
@@ -151,7 +153,7 @@ public class RippleView extends RelativeLayout
                 tmpBitmap.recycle();
             }
 
-            paint.setColor(getResources().getColor(R.color.rippelColor));
+            paint.setColor(rippleColor);
 
             timer++;
 
@@ -210,7 +212,7 @@ public class RippleView extends RelativeLayout
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
+        //paint.setColor(color);
         canvas.drawCircle(x, y, radius, paint);
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
