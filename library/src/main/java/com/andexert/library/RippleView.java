@@ -26,17 +26,19 @@ package com.andexert.library;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 /**
@@ -48,17 +50,20 @@ public class RippleView extends RelativeLayout
     private int WIDTH;
     private int HEIGHT;
     private final int FRAME_RATE = 15;
-    private final int DURATION = 400;
+    private final int DURATION = 500;
     private final int PAINT_ALPHA = 90;
     private Handler canvasHandler;
     private boolean isRounded;
     private float radiusMax = 0;
     private boolean animationRunning = false;
     private int timer = 0;
+    private int timerEmpty = 0;
+    private int durationEmpty = -1;
     private float x = -1;
     private float y = -1;
     private Animation scaleAnimation;
     private Paint paint;
+    private Bitmap originBitmap;
     private Runnable runnable = new Runnable()
     {
         @Override
@@ -105,6 +110,8 @@ public class RippleView extends RelativeLayout
             this.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
 
+        this.setDrawingCacheEnabled(true);
+
     }
 
     @Override
@@ -117,6 +124,8 @@ public class RippleView extends RelativeLayout
             {
                 animationRunning = false;
                 timer = 0;
+                durationEmpty = -1;
+                timerEmpty = 0;
                 canvas.restore();
                 invalidate();
                 return;
@@ -127,11 +136,30 @@ public class RippleView extends RelativeLayout
             if (timer == 0)
                 canvas.save();
 
+                    canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
 
-            canvas.drawCircle(x, y, (radiusMax * ((((float) timer * FRAME_RATE)) / DURATION)), paint);
+                paint.setColor(getResources().getColor(android.R.color.holo_red_light));
+
+            if (originBitmap != null && (((float) timer * FRAME_RATE) / DURATION) > 0.4f)
+            {
+                if (durationEmpty == -1)
+                    durationEmpty = DURATION - timer * FRAME_RATE;
+
+                timerEmpty++;
+                final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax)* (((float) timerEmpty * FRAME_RATE) / (durationEmpty))));
+                canvas.drawBitmap(tmpBitmap, 0, 0, paint);
+                tmpBitmap.recycle();
+            }
+
+            paint.setColor(getResources().getColor(R.color.rippelColor));
 
             timer++;
-            paint.setAlpha((int) (PAINT_ALPHA - (PAINT_ALPHA * ((((float) timer * FRAME_RATE)) / DURATION))));
+
+            if ((((float) timer * FRAME_RATE) / DURATION) > 0.6f)
+                paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA)* (((float) timerEmpty * FRAME_RATE) / (durationEmpty)))));
+            else
+                paint.setAlpha(PAINT_ALPHA);
+
         }
 
     }
@@ -150,7 +178,7 @@ public class RippleView extends RelativeLayout
     {
         if (!animationRunning)
         {
-            this.startAnimation(scaleAnimation);
+            //this.startAnimation(scaleAnimation);
             radiusMax = Math.max(WIDTH, HEIGHT) / 2f;
             if (isRounded)
             {
@@ -163,9 +191,31 @@ public class RippleView extends RelativeLayout
                 this.y = event.getY();
             }
             animationRunning = true;
+
+            originBitmap = getDrawingCache(true);
+
             invalidate();
         }
 
         return super.onInterceptTouchEvent(event);
+    }
+
+    private Bitmap getCircleBitmap(final int radius) {
+        final Bitmap output = Bitmap.createBitmap(originBitmap.getWidth(),
+                originBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(output);
+        final int color = Color.RED;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect((int)(x - radius), (int)(y - radius), (int)(x + radius), (int)(y + radius));
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(x, y, radius, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(originBitmap, rect, rect, paint);
+
+        return output;
     }
 }
