@@ -106,11 +106,8 @@ public class RippleView extends RelativeLayout
         paint.setColor(rippleColor);
         paint.setAlpha(PAINT_ALPHA);
         this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        this.setWillNotDraw(false);
 
-        if (getBackground() == null)
-        {
-            this.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        }
 
         this.setDrawingCacheEnabled(true);
 
