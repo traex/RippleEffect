@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ The MIT License (MIT)
   ~
@@ -23,19 +24,16 @@
   ~ THE SOFTWARE.
   -->
 
-<resources>
-    <declare-styleable name="RippleView">
-        <attr name="alpha" format="integer" />
-        <attr name="framerate" format="integer"/>
-        <attr name="rippleDuration" format="integer"/>
-        <attr name="zoomDuration" format="integer" />
-        <attr name="color" format="color" />
-        <attr name="centered" format="boolean" />
-        <attr name="type" format="enum">
-            <enum name="simpleRipple" value="0"/>
-            <enum name="doubleRipple" value="1" />
-        </attr>
-        <attr name="zoom" format="boolean" />
-
-    </declare-styleable>
-</resources>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <scale
+        android:fromXScale="1"
+        android:fromYScale="1"
+        android:toXScale="1.03"
+        android:toYScale="1.03"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:duration="150"
+        android:repeatMode="reverse"
+        android:repeatCount="1"
+        android:interpolator="@android:interpolator/linear"/>
+</set>

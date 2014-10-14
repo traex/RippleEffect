@@ -23,19 +23,15 @@
   ~ THE SOFTWARE.
   -->
 
-<resources>
-    <declare-styleable name="RippleView">
-        <attr name="alpha" format="integer" />
-        <attr name="framerate" format="integer"/>
-        <attr name="rippleDuration" format="integer"/>
-        <attr name="zoomDuration" format="integer" />
-        <attr name="color" format="color" />
-        <attr name="centered" format="boolean" />
-        <attr name="type" format="enum">
-            <enum name="simpleRipple" value="0"/>
-            <enum name="doubleRipple" value="1" />
-        </attr>
-        <attr name="zoom" format="boolean" />
-
-    </declare-styleable>
-</resources>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval" android:dither="true">
+            <solid android:color="#888"/>
+        </shape>
+    </item>
+    <item android:bottom="1dp" android:right="1dp">
+    <shape android:shape="oval" android:dither="true">
+        <solid android:color="@android:color/holo_blue_dark"/>
+    </shape>
+    </item>
+</layer-list>
