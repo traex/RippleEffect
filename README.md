@@ -14,9 +14,9 @@ The lib is available on Maven Central, you can find it with [Gradle, please](htt
 
 dependencies {
     compile 'com.github.traex.ripleeffect:library:1.0'
-}-->
+}
 
-```
+```-->
 
 ### Usage
 
