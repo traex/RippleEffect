@@ -31,7 +31,7 @@ gradle.properties
 proguard.cfg
 
 #OSX
-.DS_Store
+.DS_Store/
 
 # Crashlytics
 com_crashlytics_export_strings.xml
