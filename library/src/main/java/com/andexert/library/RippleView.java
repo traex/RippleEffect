@@ -49,7 +49,7 @@ public class RippleView extends RelativeLayout
     private int HEIGHT;
     private int FRAME_RATE = 10;
     private int DURATION = 400;
-    private final int PAINT_ALPHA = 90;
+    private int PAINT_ALPHA = 90;
     private Handler canvasHandler;
     private float radiusMax = 0;
     private boolean animationRunning = false;
@@ -60,6 +60,7 @@ public class RippleView extends RelativeLayout
     private float y = -1;
     private Animation scaleAnimation;
     private Boolean hasToZoom;
+    private Boolean isCentered;
     private Integer rippleType;
     private Paint paint;
     private Bitmap originBitmap;
@@ -96,8 +97,10 @@ public class RippleView extends RelativeLayout
         rippleColor = typedArray.getColor(R.styleable.RippleView_color, getResources().getColor(R.color.rippelColor));
         rippleType = typedArray.getInt(R.styleable.RippleView_type, 0);
         hasToZoom = typedArray.getBoolean(R.styleable.RippleView_zoom, false);
-        DURATION = typedArray.getInteger(R.styleable.RippleView_rippleDuration, 400);
-        FRAME_RATE = typedArray.getInteger(R.styleable.RippleView_framerate, 10);
+        isCentered = typedArray.getBoolean(R.styleable.RippleView_centered, false);
+        DURATION = typedArray.getInteger(R.styleable.RippleView_rippleDuration, DURATION);
+        FRAME_RATE = typedArray.getInteger(R.styleable.RippleView_framerate, FRAME_RATE);
+        PAINT_ALPHA = typedArray.getInteger(R.styleable.RippleView_alpha, PAINT_ALPHA);
         canvasHandler = new Handler();
         scaleAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom);
         scaleAnimation.setDuration(typedArray.getInteger(R.styleable.RippleView_zoomDuration, 150));
@@ -183,7 +186,7 @@ public class RippleView extends RelativeLayout
                 this.startAnimation(scaleAnimation);
 
             radiusMax = Math.max(WIDTH, HEIGHT) / 2f;
-            if (rippleType == 1)
+            if (isCentered || rippleType == 1)
             {
                 this.x = getMeasuredWidth() / 2;
                 this.y = getMeasuredHeight() / 2;

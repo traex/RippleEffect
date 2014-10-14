@@ -44,14 +44,31 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"/>
 
+
+
         <com.andexert.library.RippleView
             android:id="@+id/more"
             android:layout_width="?android:actionBarSize"
             android:layout_height="?android:actionBarSize"
+            android:layout_toLeftOf="@+id/more2"
+            android:layout_margin="5dp"
+            ripple:centered="true">
+            <ImageView
+                android:layout_width="?android:actionBarSize"
+                android:layout_height="?android:actionBarSize"
+                android:src="@drawable/ic_profil_plus"
+                android:layout_centerInParent="true"
+                android:padding="10dp"
+                android:background="@android:color/holo_blue_dark"/>
+        </com.andexert.library.RippleView>
+
+        <com.andexert.library.RippleView
+            android:id="@+id/more2"
+            android:layout_width="?android:actionBarSize"
+            android:layout_height="?android:actionBarSize"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
-            ripple:type="doubleRipple"
-            ripple:color="@android:color/holo_red_dark">
+            ripple:type="doubleRipple">
         <ImageView
             android:layout_width="?android:actionBarSize"
             android:layout_height="?android:actionBarSize"
