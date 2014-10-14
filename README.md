@@ -59,6 +59,10 @@ You can change several attributes in the XML file :
 * app:type [enum (simpleRipple, doubleRipple) def:simpleRipple] --> Simple or double ripple
 * app:zoom [boolean def:false] --> Enable zoom animation
 
+### Troubleshooting
+
+If you want to use the double ripple you have to set a background for the RippleView or for its child.
+
 #### Acknowledgements
 
 Thanks to [Google](https://www.google.com/design/spec/material-design/introduction.html) for its Material Design :)
