@@ -50,8 +50,8 @@ public class RippleView extends RelativeLayout
 {
     private int WIDTH;
     private int HEIGHT;
-    private final int FRAME_RATE = 15;
-    private final int DURATION = 500;
+    private int FRAME_RATE = 10;
+    private int DURATION = 400;
     private final int PAINT_ALPHA = 90;
     private Handler canvasHandler;
     private float radiusMax = 0;
@@ -97,17 +97,19 @@ public class RippleView extends RelativeLayout
     {
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
         rippleColor = typedArray.getColor(R.styleable.RippleView_color, getResources().getColor(R.color.rippelColor));
-        rippleType = typedArray.getInt(R.styleable.RippleView_rippleType, 0);
+        rippleType = typedArray.getInt(R.styleable.RippleView_type, 0);
         hasToZoom = typedArray.getBoolean(R.styleable.RippleView_zoom, false);
+        DURATION = typedArray.getInteger(R.styleable.RippleView_rippleDuration, 400);
+        FRAME_RATE = typedArray.getInteger(R.styleable.RippleView_framerate, 10);
         canvasHandler = new Handler();
-
         scaleAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom);
+        scaleAnimation.setDuration(typedArray.getInteger(R.styleable.RippleView_zoomDuration, 150));
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(rippleColor);
         paint.setAlpha(PAINT_ALPHA);
-        this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        //this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         this.setWillNotDraw(false);
 
         this.setDrawingCacheEnabled(true);

@@ -25,10 +25,13 @@
 
 <resources>
     <declare-styleable name="RippleView">
+        <attr name="framerate" format="integer"/>
+        <attr name="rippleDuration" format="integer"/>
+        <attr name="zoomDuration" format="integer" />
         <attr name="color" format="color" />
-        <attr name="rippleType" format="enum">
-            <enum name="simple" value="0"/>
-            <enum name="test" value="1" />
+        <attr name="type" format="enum">
+            <enum name="simpleRipple" value="0"/>
+            <enum name="doubleRipple" value="1" />
         </attr>
         <attr name="zoom" format="boolean" />
 
