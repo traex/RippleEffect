@@ -7,16 +7,16 @@ ExpandableLayout provides an easy way to create a view called header with an exp
 
 ![RippleEffect GIF](https://github.com/traex/RippleEffect/blob/master/demo.gif)
 
-<!---### Integration
-The lib is available on Maven Central, you can find it with [Gradle, please](http://gradleplease.appspot.com/#ripleeffect)
+### Integration
+The lib is available on Maven Central, you can find it with [Gradle, please](http://gradleplease.appspot.com/#rippleeffect)
 
 ``` xml
 
 dependencies {
-    compile 'com.github.traex.ripleeffect:library:1.0'
+    compile 'com.github.traex.rippleeffect:library:1.0'
 }
 
-```-->
+```
 
 ### Usage
 
