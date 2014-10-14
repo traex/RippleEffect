@@ -56,7 +56,7 @@
             <ImageView
                 android:layout_width="?android:actionBarSize"
                 android:layout_height="?android:actionBarSize"
-                android:src="@drawable/ic_profil_plus"
+                android:src="@android:drawable/ic_menu_edit"
                 android:layout_centerInParent="true"
                 android:padding="10dp"
                 android:background="@android:color/holo_blue_dark"/>

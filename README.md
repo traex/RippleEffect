@@ -22,29 +22,46 @@ dependencies {
 
 #### RippleView
 
-Declare an ExpandableLayout inside your XML layout file. You also need to other layouts for header and content:
+Declare a RippleView inside your XML layout file with a content like an ImageView or whatever.
 
 ``` xml
 
-  <com.andexert.expandablelayout.library.ExpandableLayout
-         android:id="@+id/expandableLayout"
-         xmlns:expandable="http://schemas.android.com/apk/res-auto"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         expandable:headerLayout="@layout/view_header"
-         expandable:contentLayout="@layout/view_content"/>
+  <com.andexert.library.RippleView
+      android:id="@+id/more"
+      android:layout_width="?android:actionBarSize"
+      android:layout_height="?android:actionBarSize"
+      android:layout_toLeftOf="@+id/more2"
+      android:layout_margin="5dp"
+      ripple:centered="true">
+
+          <ImageView
+              android:layout_width="?android:actionBarSize"
+              android:layout_height="?android:actionBarSize"
+              android:src="@android:drawable/ic_menu_edit"
+              android:layout_centerInParent="true"
+              android:padding="10dp"
+              android:background="@android:color/holo_blue_dark"/>
+
+  </com.andexert.library.RippleView>
 
 ```
 
 ### Customization
 
-You can change duration of the animation:
+You can change several attributes in the XML file :
 
-* app:duration [integer def:200] --> Duration of the animation
+* app:alpha [integer def:90 0-255] --> Alpha of the ripple
+* app:framerate [integer def:10] --> Frame rate of the ripple animation
+* app:rippleDuration [integer def:400] --> Duration of the ripple animation
+* app:zoomDuration [integer def:150] --> Duration of zoom animation
+* app:color [color def:@android:color/white] --> Color of the ripple
+* app:centered [boolean def:false] --> Center ripple in the child view
+* app:type [enum (simpleRipple, doubleRipple) def:simpleRipple] --> Simple or double ripple
+* app:zoom [boolean def:false] --> Enable zoom animation
 
 #### Acknowledgements
 
-Thanks to [Google](https://www.google.com/design/spec/material-design/introduction.html) for Material Design :)
+Thanks to [Google](https://www.google.com/design/spec/material-design/introduction.html) for its Material Design :)
 
 ### MIT License
 
