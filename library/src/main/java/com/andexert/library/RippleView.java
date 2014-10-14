@@ -54,7 +54,6 @@ public class RippleView extends RelativeLayout
     private final int DURATION = 500;
     private final int PAINT_ALPHA = 90;
     private Handler canvasHandler;
-    private boolean isRounded;
     private float radiusMax = 0;
     private boolean animationRunning = false;
     private int timer = 0;
@@ -63,6 +62,8 @@ public class RippleView extends RelativeLayout
     private float x = -1;
     private float y = -1;
     private Animation scaleAnimation;
+    private Boolean hasToZoom;
+    private Integer rippleType;
     private Paint paint;
     private Bitmap originBitmap;
     private int rippleColor;
@@ -96,7 +97,8 @@ public class RippleView extends RelativeLayout
     {
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
         rippleColor = typedArray.getColor(R.styleable.RippleView_color, getResources().getColor(R.color.rippelColor));
-        isRounded = typedArray.getBoolean(R.styleable.RippleView_rounded, false);
+        rippleType = typedArray.getInt(R.styleable.RippleView_rippleType, 0);
+        hasToZoom = typedArray.getBoolean(R.styleable.RippleView_zoom, false);
         canvasHandler = new Handler();
 
         scaleAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom);
@@ -108,9 +110,7 @@ public class RippleView extends RelativeLayout
         this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         this.setWillNotDraw(false);
 
-
         this.setDrawingCacheEnabled(true);
-
     }
 
     @Override
@@ -132,14 +132,14 @@ public class RippleView extends RelativeLayout
             else
                 canvasHandler.postDelayed(runnable, FRAME_RATE);
 
-            if (timer == 2  )
+            if (timer == 0)
                 canvas.save();
 
             canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
 
             paint.setColor(getResources().getColor(android.R.color.holo_red_light));
 
-            if (originBitmap != null && (((float) timer * FRAME_RATE) / DURATION) > 0.4f)
+            if (rippleType == 1 && originBitmap != null && (((float) timer * FRAME_RATE) / DURATION) > 0.4f)
             {
                 if (durationEmpty == -1)
                     durationEmpty = DURATION - timer * FRAME_RATE;
@@ -154,13 +154,16 @@ public class RippleView extends RelativeLayout
 
             timer++;
 
-            if ((((float) timer * FRAME_RATE) / DURATION) > 0.6f)
-                paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA)* (((float) timerEmpty * FRAME_RATE) / (durationEmpty)))));
+            if (rippleType == 1)
+            {
+                if ((((float) timer * FRAME_RATE) / DURATION) > 0.6f)
+                    paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty)))));
+                else
+                    paint.setAlpha(PAINT_ALPHA);
+            }
             else
-                paint.setAlpha(PAINT_ALPHA);
-
+                paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timer * FRAME_RATE) / DURATION))));
         }
-
     }
 
     @Override
@@ -177,9 +180,11 @@ public class RippleView extends RelativeLayout
     {
         if (!animationRunning)
         {
-            //this.startAnimation(scaleAnimation);
+            if (hasToZoom)
+                this.startAnimation(scaleAnimation);
+
             radiusMax = Math.max(WIDTH, HEIGHT) / 2f;
-            if (isRounded)
+            if (rippleType == 1)
             {
                 this.x = getMeasuredWidth() / 2;
                 this.y = getMeasuredHeight() / 2;
@@ -203,13 +208,11 @@ public class RippleView extends RelativeLayout
         final Bitmap output = Bitmap.createBitmap(originBitmap.getWidth(),
                 originBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);
-        final int color = Color.RED;
         final Paint paint = new Paint();
         final Rect rect = new Rect((int)(x - radius), (int)(y - radius), (int)(x + radius), (int)(y + radius));
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
-        //paint.setColor(color);
         canvas.drawCircle(x, y, radius, paint);
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));

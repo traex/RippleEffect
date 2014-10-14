@@ -26,6 +26,11 @@
 <resources>
     <declare-styleable name="RippleView">
         <attr name="color" format="color" />
-        <attr name="rounded" format="boolean" />
+        <attr name="rippleType" format="enum">
+            <enum name="simple" value="0"/>
+            <enum name="test" value="1" />
+        </attr>
+        <attr name="zoom" format="boolean" />
+
     </declare-styleable>
 </resources>
