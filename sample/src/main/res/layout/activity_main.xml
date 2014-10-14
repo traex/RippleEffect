@@ -27,8 +27,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@android:color/holo_blue_dark">
+    tools:context=".MainActivity">
 
     <RelativeLayout
         android:id="@+id/actionbar"
@@ -80,25 +79,6 @@
             android:gravity="center"
             android:text="Hello World!"
             android:background="@android:color/holo_green_light"/>
-
-    </com.andexert.library.RippleView>
-
-    <com.andexert.library.RippleView
-        android:id="@+id/circle"
-        android:layout_width="?android:actionBarSize"
-        android:layout_height="?android:actionBarSize"
-        android:layout_marginLeft="30dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
-        ripple:type="doubleRipple">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_profil_plus"
-            android:padding="15dp"
-            android:background="@android:color/holo_blue_dark"/>
 
     </com.andexert.library.RippleView>
 

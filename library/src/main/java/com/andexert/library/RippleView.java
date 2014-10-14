@@ -28,16 +28,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
@@ -198,7 +195,8 @@ public class RippleView extends RelativeLayout
             }
             animationRunning = true;
 
-            originBitmap = getDrawingCache(true);
+            if (rippleType == 1 && originBitmap == null)
+                originBitmap = getDrawingCache(true);
 
             invalidate();
         }
@@ -207,8 +205,7 @@ public class RippleView extends RelativeLayout
     }
 
     private Bitmap getCircleBitmap(final int radius) {
-        final Bitmap output = Bitmap.createBitmap(originBitmap.getWidth(),
-                originBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        final Bitmap output = Bitmap.createBitmap(originBitmap.getWidth(), originBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);
         final Paint paint = new Paint();
         final Rect rect = new Rect((int)(x - radius), (int)(y - radius), (int)(x + radius), (int)(y + radius));
