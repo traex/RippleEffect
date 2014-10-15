@@ -56,8 +56,9 @@ You can change several attributes in the XML file :
 * app:zoomDuration [integer def:150] --> Duration of zoom animation
 * app:color [color def:@android:color/white] --> Color of the ripple
 * app:centered [boolean def:false] --> Center ripple in the child view
-* app:type [enum (simpleRipple, doubleRipple) def:simpleRipple] --> Simple or double ripple
+* app:type [enum (simpleRipple, doubleRipple, rectangle) def:simpleRipple] --> Simple, double ripple or rectangle
 * app:zoom [boolean def:false] --> Enable zoom animation
+* app:ripplePadding [dimension def:0] --> Add padding to the ripple
 
 ### Troubleshooting
 
