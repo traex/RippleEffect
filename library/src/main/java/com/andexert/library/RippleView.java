@@ -34,9 +34,14 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -65,6 +70,9 @@ public class RippleView extends RelativeLayout
     private Paint paint;
     private Bitmap originBitmap;
     private int rippleColor;
+    private View childView;
+    private int ripplePadding;
+    private GestureDetector gestureDetector;
     private Runnable runnable = new Runnable()
     {
         @Override
@@ -101,6 +109,7 @@ public class RippleView extends RelativeLayout
         DURATION = typedArray.getInteger(R.styleable.RippleView_rippleDuration, DURATION);
         FRAME_RATE = typedArray.getInteger(R.styleable.RippleView_framerate, FRAME_RATE);
         PAINT_ALPHA = typedArray.getInteger(R.styleable.RippleView_alpha, PAINT_ALPHA);
+        ripplePadding = typedArray.getDimensionPixelSize(R.styleable.RippleView_ripplePadding, 0) * 2;
         canvasHandler = new Handler();
         scaleAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom);
         scaleAnimation.setDuration(typedArray.getInteger(R.styleable.RippleView_zoomDuration, 150));
@@ -109,10 +118,31 @@ public class RippleView extends RelativeLayout
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(rippleColor);
         paint.setAlpha(PAINT_ALPHA);
-        //this.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         this.setWillNotDraw(false);
 
+        gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener()
+        {
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e)
+            {
+                return true;
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e)
+            {
+                return true;
+            }
+        });
+
         this.setDrawingCacheEnabled(true);
+    }
+
+    @Override
+    public void addView(View child, int index, ViewGroup.LayoutParams params)
+    {
+        childView = child;
+        super.addView(child, index, params);
     }
 
     @Override
@@ -169,23 +199,28 @@ public class RippleView extends RelativeLayout
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
-        WIDTH = MeasureSpec.getSize(widthMeasureSpec);
-        HEIGHT = MeasureSpec.getSize(heightMeasureSpec);
-        this.setMeasuredDimension(WIDTH, HEIGHT);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        super.onSizeChanged(w, h, oldw, oldh);
+        WIDTH = w;
+        HEIGHT = h;
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event)
+    public boolean onTouchEvent(MotionEvent event)
     {
-        if (!animationRunning)
+        if (gestureDetector.onTouchEvent(event) && !animationRunning)
         {
             if (hasToZoom)
                 this.startAnimation(scaleAnimation);
 
-            radiusMax = Math.max(WIDTH, HEIGHT) / 2f;
+            radiusMax = Math.max(WIDTH, HEIGHT);
+
+            if (rippleType != 2)
+                radiusMax /= 2;
+
+            radiusMax -= ripplePadding;
+
             if (isCentered || rippleType == 1)
             {
                 this.x = getMeasuredWidth() / 2;
@@ -196,6 +231,7 @@ public class RippleView extends RelativeLayout
                 this.x = event.getX();
                 this.y = event.getY();
             }
+
             animationRunning = true;
 
             if (rippleType == 1 && originBitmap == null)
@@ -204,7 +240,14 @@ public class RippleView extends RelativeLayout
             invalidate();
         }
 
-        return super.onInterceptTouchEvent(event);
+        childView.onTouchEvent(event);
+        return true;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event)
+    {
+       return true;
     }
 
     private Bitmap getCircleBitmap(final int radius) {
