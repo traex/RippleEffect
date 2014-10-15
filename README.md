@@ -48,7 +48,7 @@ Declare a RippleView inside your XML layout file with a content like an ImageVie
 
 ### Customization
 
-You can change several attributes in the XML file :
+You can change several attributes in the XML file, you have to remove "rv_" if you are using a version below v1.1.1 :
 
 * app:rv_alpha [integer def:90 0-255] --> Alpha of the ripple
 * app:rv_framerate [integer def:10] --> Frame rate of the ripple animation
