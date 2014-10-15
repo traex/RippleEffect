@@ -13,7 +13,7 @@ The lib is available on Maven Central, you can find it with [Gradle, please](htt
 ``` xml
 
 dependencies {
-    compile 'com.github.traex.rippleeffect:library:1.1'
+    compile 'com.github.traex.rippleeffect:library:1.1.1'
 }
 
 ```
@@ -25,25 +25,23 @@ dependencies {
 Declare a RippleView inside your XML layout file with a content like an ImageView or whatever.
 
 ``` xml
+<com.andexert.library.RippleView
+  android:id="@+id/more"
+  android:layout_width="?android:actionBarSize"
+  android:layout_height="?android:actionBarSize"
+  android:layout_toLeftOf="@+id/more2"
+  android:layout_margin="5dp"
+  ripple:rv_centered="true">
 
-  <com.andexert.library.RippleView
-      android:id="@+id/more"
-      android:layout_width="?android:actionBarSize"
-      android:layout_height="?android:actionBarSize"
-      android:layout_toLeftOf="@+id/more2"
-      android:layout_margin="5dp"
-      ripple:centered="true">
+  <ImageView
+    android:layout_width="?android:actionBarSize"
+    android:layout_height="?android:actionBarSize"
+    android:src="@android:drawable/ic_menu_edit"
+    android:layout_centerInParent="true"
+    android:padding="10dp"
+    android:background="@android:color/holo_blue_dark"/>
 
-          <ImageView
-              android:layout_width="?android:actionBarSize"
-              android:layout_height="?android:actionBarSize"
-              android:src="@android:drawable/ic_menu_edit"
-              android:layout_centerInParent="true"
-              android:padding="10dp"
-              android:background="@android:color/holo_blue_dark"/>
-
-  </com.andexert.library.RippleView>
-
+</com.andexert.library.RippleView>
 ```
 
 ### Customization
