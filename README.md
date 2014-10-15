@@ -13,7 +13,7 @@ The lib is available on Maven Central, you can find it with [Gradle, please](htt
 ``` xml
 
 dependencies {
-    compile 'com.github.traex.rippleeffect:library:1.0'
+    compile 'com.github.traex.rippleeffect:library:1.1'
 }
 
 ```
