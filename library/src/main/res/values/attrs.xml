@@ -25,19 +25,19 @@
 
 <resources>
     <declare-styleable name="RippleView">
-        <attr name="alpha" format="integer" />
-        <attr name="framerate" format="integer"/>
-        <attr name="rippleDuration" format="integer"/>
-        <attr name="zoomDuration" format="integer" />
-        <attr name="color" format="color" />
-        <attr name="centered" format="boolean" />
-        <attr name="type" format="enum">
+        <attr name="rv_alpha" format="integer" />
+        <attr name="rv_framerate" format="integer"/>
+        <attr name="rv_rippleDuration" format="integer"/>
+        <attr name="rv_zoomDuration" format="integer" />
+        <attr name="rv_color" format="color" />
+        <attr name="rv_centered" format="boolean" />
+        <attr name="rv_type" format="enum">
             <enum name="simpleRipple" value="0"/>
             <enum name="doubleRipple" value="1"/>
             <enum name="rectangle" value="2" />
         </attr>
-        <attr name="ripplePadding" format="dimension" />
-        <attr name="zoom" format="boolean" />
+        <attr name="rv_ripplePadding" format="dimension" />
+        <attr name="rv_zoom" format="boolean" />
 
     </declare-styleable>
 </resources>

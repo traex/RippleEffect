@@ -52,7 +52,7 @@
             android:layout_height="?android:actionBarSize"
             android:layout_toLeftOf="@+id/more2"
             android:layout_margin="5dp"
-            ripple:centered="true">
+            ripple:rv_centered="true">
             <ImageView
                 android:layout_width="?android:actionBarSize"
                 android:layout_height="?android:actionBarSize"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
-            ripple:type="doubleRipple">
+            ripple:rv_type="doubleRipple">
         <ImageView
             android:layout_width="?android:actionBarSize"
             android:layout_height="?android:actionBarSize"
@@ -87,7 +87,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
-        ripple:type="rectangle">
+        ripple:rv_type="rectangle">
 
         <TextView
             android:layout_width="200dp"
@@ -108,10 +108,10 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        ripple:centered="true"
+        ripple:rv_centered="true"
         android:padding="5dp"
-        ripple:type="doubleRipple"
-        ripple:ripplePadding="6dp">
+        ripple:rv_type="doubleRipple"
+        ripple:rv_ripplePadding="12dp">
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/button_floating_action"

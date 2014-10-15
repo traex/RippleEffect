@@ -50,14 +50,15 @@ Declare a RippleView inside your XML layout file with a content like an ImageVie
 
 You can change several attributes in the XML file :
 
-* app:alpha [integer def:90 0-255] --> Alpha of the ripple
-* app:framerate [integer def:10] --> Frame rate of the ripple animation
-* app:rippleDuration [integer def:400] --> Duration of the ripple animation
-* app:zoomDuration [integer def:150] --> Duration of zoom animation
-* app:color [color def:@android:color/white] --> Color of the ripple
-* app:centered [boolean def:false] --> Center ripple in the child view
-* app:type [enum (simpleRipple, doubleRipple) def:simpleRipple] --> Simple or double ripple
-* app:zoom [boolean def:false] --> Enable zoom animation
+* app:rv_alpha [integer def:90 0-255] --> Alpha of the ripple
+* app:rv_framerate [integer def:10] --> Frame rate of the ripple animation
+* app:rv_rippleDuration [integer def:400] --> Duration of the ripple animation
+* app:rv_zoomDuration [integer def:150] --> Duration of zoom animation
+* app:rv_color [color def:@android:color/white] --> Color of the ripple
+* app:rv_centered [boolean def:false] --> Center ripple in the child view
+* app:rv_type [enum (simpleRipple, doubleRipple) def:simpleRipple] --> Simple or double ripple
+* app:rv_zoom [boolean def:false] --> Enable zoom animation
+* app:rv_ripplePadding [dimension def:0] --> Add a padding to the ripple
 
 ### Troubleshooting
 
