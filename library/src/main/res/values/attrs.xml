@@ -33,8 +33,10 @@
         <attr name="centered" format="boolean" />
         <attr name="type" format="enum">
             <enum name="simpleRipple" value="0"/>
-            <enum name="doubleRipple" value="1" />
+            <enum name="doubleRipple" value="1"/>
+            <enum name="rectangle" value="2" />
         </attr>
+        <attr name="ripplePadding" format="dimension" />
         <attr name="zoom" format="boolean" />
 
     </declare-styleable>

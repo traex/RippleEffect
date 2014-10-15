@@ -57,15 +57,15 @@
                 android:layout_width="?android:actionBarSize"
                 android:layout_height="?android:actionBarSize"
                 android:src="@android:drawable/ic_menu_edit"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:padding="10dp"
                 android:background="@android:color/holo_blue_dark"/>
         </com.andexert.library.RippleView>
 
         <com.andexert.library.RippleView
             android:id="@+id/more2"
-            android:layout_width="?android:actionBarSize"
-            android:layout_height="?android:actionBarSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
             ripple:type="doubleRipple">
@@ -73,7 +73,7 @@
             android:layout_width="?android:actionBarSize"
             android:layout_height="?android:actionBarSize"
             android:src="@drawable/ic_profil_plus"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:padding="10dp"
             android:background="@android:color/holo_blue_dark"/>
         </com.andexert.library.RippleView>
@@ -86,16 +86,40 @@
         android:layout_below="@+id/actionbar"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="30dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        ripple:type="rectangle">
 
         <TextView
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:textColor="@android:color/white"
+            android:textSize="18sp"
             android:gravity="center"
             android:text="Hello World!"
             android:background="@android:color/holo_green_light"/>
+
+    </com.andexert.library.RippleView>
+
+    <com.andexert.library.RippleView
+        android:id="@+id/floating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        ripple:centered="true"
+        android:padding="5dp"
+        ripple:type="doubleRipple"
+        ripple:ripplePadding="6dp">
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/button_floating_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_profil_plus"
+            ripple:fab_colorNormal="@android:color/holo_red_dark"
+            ripple:fab_colorPressed="@android:color/holo_red_dark"/>
 
     </com.andexert.library.RippleView>
 
