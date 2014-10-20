@@ -40,9 +40,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -104,8 +102,6 @@ public class RippleView extends RelativeLayout
 
     private void init(final Context context, final AttributeSet attrs)
     {
-        if (isInEditMode())
-            return;
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
         rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, getResources().getColor(R.color.rippelColor));
@@ -173,34 +169,47 @@ public class RippleView extends RelativeLayout
             if (timer == 0)
                 canvas.save();
 
-            canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
-
-            paint.setColor(getResources().getColor(android.R.color.holo_red_light));
-
-            if (rippleType == 1 && originBitmap != null && (((float) timer * FRAME_RATE) / DURATION) > 0.4f)
+            if (rippleType == 3)
             {
-                if (durationEmpty == -1)
-                    durationEmpty = DURATION - timer * FRAME_RATE;
+                canvas.drawCircle(x, y, radiusMax, paint);
 
-                timerEmpty++;
-                final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax)* (((float) timerEmpty * FRAME_RATE) / (durationEmpty))));
+                /*final Bitmap tmpBitmap = getCircleBitmap((int) (radiusMax - ((radiusMax) * (((float) timer * FRAME_RATE) / DURATION))));
                 canvas.drawBitmap(tmpBitmap, 0, 0, paint);
-                tmpBitmap.recycle();
-            }
+                tmpBitmap.recycle();*/
 
-            paint.setColor(rippleColor);
-
-            timer++;
-
-            if (rippleType == 1)
-            {
-                if ((((float) timer * FRAME_RATE) / DURATION) > 0.6f)
-                    paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty)))));
-                else
-                    paint.setAlpha(PAINT_ALPHA);
+                paint.setAlpha(PAINT_ALPHA);
             }
             else
-                paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timer * FRAME_RATE) / DURATION))));
+            {
+                canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
+
+                paint.setColor(getResources().getColor(android.R.color.holo_red_light));
+
+                if (rippleType == 1 && originBitmap != null && (((float) timer * FRAME_RATE) / DURATION) > 0.4f)
+                {
+                    if (durationEmpty == -1)
+                        durationEmpty = DURATION - timer * FRAME_RATE;
+
+                    timerEmpty++;
+                    final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty))));
+                    canvas.drawBitmap(tmpBitmap, 0, 0, paint);
+                    tmpBitmap.recycle();
+                }
+
+                paint.setColor(rippleColor);
+
+                if (rippleType == 1)
+                {
+                    if ((((float) timer * FRAME_RATE) / DURATION) > 0.6f)
+                        paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty)))));
+                    else
+                        paint.setAlpha(PAINT_ALPHA);
+                }
+                else
+                    paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timer * FRAME_RATE) / DURATION))));
+            }
+
+            timer++;
         }
     }
 
@@ -232,7 +241,7 @@ public class RippleView extends RelativeLayout
 
             radiusMax -= ripplePadding;
 
-            if (isCentered || rippleType == 1)
+            if (isCentered || rippleType == 1 || rippleType == 3)
             {
                 this.x = getMeasuredWidth() / 2;
                 this.y = getMeasuredHeight() / 2;
@@ -245,7 +254,7 @@ public class RippleView extends RelativeLayout
 
             animationRunning = true;
 
-            if (rippleType == 1 && originBitmap == null)
+            if ((rippleType == 3 || rippleType == 1) && originBitmap == null)
                 originBitmap = getDrawingCache(true);
 
             invalidate();
