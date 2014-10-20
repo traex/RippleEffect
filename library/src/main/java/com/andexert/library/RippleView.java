@@ -41,6 +41,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -63,7 +64,9 @@ public class RippleView extends RelativeLayout
     private int durationEmpty = -1;
     private float x = -1;
     private float y = -1;
-    private Animation scaleAnimation;
+    private int zoomDuration;
+    private float zoomScale;
+    private ScaleAnimation scaleAnimation;
     private Boolean hasToZoom;
     private Boolean isCentered;
     private Integer rippleType;
@@ -114,8 +117,8 @@ public class RippleView extends RelativeLayout
         PAINT_ALPHA = typedArray.getInteger(R.styleable.RippleView_rv_alpha, PAINT_ALPHA);
         ripplePadding = typedArray.getDimensionPixelSize(R.styleable.RippleView_rv_ripplePadding, 0);
         canvasHandler = new Handler();
-        scaleAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom);
-        scaleAnimation.setDuration(typedArray.getInteger(R.styleable.RippleView_rv_zoomDuration, 150));
+        zoomScale = typedArray.getFloat(R.styleable.RippleView_rv_zoomScale, 1.03f);
+        zoomDuration = typedArray.getInt(R.styleable.RippleView_rv_zoomDuration, 200);
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
@@ -207,6 +210,11 @@ public class RippleView extends RelativeLayout
         super.onSizeChanged(w, h, oldw, oldh);
         WIDTH = w;
         HEIGHT = h;
+
+        scaleAnimation = new ScaleAnimation(1.0f, zoomScale, 1.0f, zoomScale, w / 2, h / 2);
+        scaleAnimation.setDuration(zoomDuration);
+        scaleAnimation.setRepeatMode(Animation.REVERSE);
+        scaleAnimation.setRepeatCount(1);
     }
 
     @Override
