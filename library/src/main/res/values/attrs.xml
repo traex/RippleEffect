@@ -35,7 +35,6 @@
             <enum name="simpleRipple" value="0"/>
             <enum name="doubleRipple" value="1"/>
             <enum name="rectangle" value="2" />
-            <enum name="reverse" value="3"/>
         </attr>
         <attr name="rv_ripplePadding" format="dimension" />
         <attr name="rv_zoom" format="boolean" />
