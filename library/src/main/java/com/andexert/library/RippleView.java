@@ -101,6 +101,9 @@ public class RippleView extends RelativeLayout
 
     private void init(final Context context, final AttributeSet attrs)
     {
+        if (isInEditMode())
+            return;
+
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
         rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, getResources().getColor(R.color.rippelColor));
         rippleType = typedArray.getInt(R.styleable.RippleView_rv_type, 0);
