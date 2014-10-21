@@ -247,6 +247,7 @@ public class RippleView extends RelativeLayout
                 originBitmap = getDrawingCache(true);
 
             invalidate();
+            this.performClick();
         }
 
         childView.onTouchEvent(event);
