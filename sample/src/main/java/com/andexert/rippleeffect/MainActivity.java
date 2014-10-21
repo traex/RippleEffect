@@ -2,8 +2,13 @@ package com.andexert.rippleeffect;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.andexert.library.RippleView;
 
 
 public class MainActivity extends Activity {
@@ -12,6 +17,26 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final RippleView rippleView = (RippleView) findViewById(R.id.rect);
+        final TextView textView = (TextView) findViewById(R.id.rect_child);
+
+        rippleView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.e("Sample", "Click Rect !");
+            }
+        });
+        textView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.e("Sample", "Click rect child !");
+            }
+        });
     }
 
 
