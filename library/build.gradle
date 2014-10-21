@@ -8,8 +8,8 @@ android {
         applicationId "com.andexert.library"
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 4
-        versionName "1.2"
+        versionCode 5
+        versionName "1.2.1"
     }
     buildTypes {
         release {
