@@ -103,26 +103,11 @@
 
     </com.andexert.library.RippleView>
 
-    <com.andexert.library.RippleView
-        android:id="@+id/floating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        ripple:rv_centered="true"
-        android:padding="5dp"
-        ripple:rv_type="doubleRipple"
-        ripple:rv_ripplePadding="12dp">
-
-        <com.melnykov.fab.FloatingActionButton
-            android:id="@+id/button_floating_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_profil_plus"
-            ripple:fab_colorNormal="@android:color/holo_red_dark"
-            ripple:fab_colorPressed="@android:color/holo_red_dark"/>
-
-    </com.andexert.library.RippleView>
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/rect"
+        android:id="@+id/recycler_view"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>
