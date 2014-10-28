@@ -200,6 +200,7 @@ public class RippleView extends RelativeLayout {
         super.onSizeChanged(w, h, oldw, oldh);
         WIDTH = w;
         HEIGHT = h;
+        calculateMaxRadius();
 
         scaleAnimation = new ScaleAnimation(1.0f, zoomScale, 1.0f, zoomScale, w / 2, h / 2);
         scaleAnimation.setDuration(zoomDuration);
@@ -207,18 +208,20 @@ public class RippleView extends RelativeLayout {
         scaleAnimation.setRepeatCount(1);
     }
 
+    private void calculateMaxRadius() {
+        radiusMax = Math.max(WIDTH, HEIGHT);
+
+        if (rippleType != 1)
+            radiusMax /= 2;
+
+        radiusMax -= ripplePadding;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (gestureDetector.onTouchEvent(event) && !animationRunning) {
             if (hasToZoom)
                 this.startAnimation(scaleAnimation);
-
-            radiusMax = Math.max(WIDTH, HEIGHT);
-
-            if (rippleType != 2)
-                radiusMax /= 2;
-
-            radiusMax -= ripplePadding;
 
             if (isCentered || rippleType == 1) {
                 this.x = getMeasuredWidth() / 2;
