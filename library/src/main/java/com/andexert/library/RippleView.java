@@ -37,7 +37,6 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
@@ -69,7 +68,6 @@ public class RippleView extends RelativeLayout {
     private Paint           paint;
     private Bitmap          originBitmap;
     private int             rippleColor;
-    private View            childView;
     private int             ripplePadding;
     private GestureDetector gestureDetector;
     private Runnable runnable = new Runnable() {
@@ -132,12 +130,6 @@ public class RippleView extends RelativeLayout {
         });
 
         this.setDrawingCacheEnabled(true);
-    }
-
-    @Override
-    public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        childView = child;
-        super.addView(child, index, params);
     }
 
     @Override
