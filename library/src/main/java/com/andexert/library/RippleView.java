@@ -145,15 +145,18 @@ public class RippleView extends RelativeLayout {
                 if (hasParent() && passClickToParent) {
                     View parent = (View) getParent();
                     parent.performClick();
+                } else {
+                    this.performClick();
                 }
                 invalidate();
                 return;
-            } else
+            } else {
                 canvasHandler.postDelayed(runnable, FRAME_RATE);
+            }
 
-            if (timer == 0)
+            if (timer == 0) {
                 canvas.save();
-
+            }
 
             canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
 
@@ -229,7 +232,6 @@ public class RippleView extends RelativeLayout {
                 originBitmap = getDrawingCache(true);
 
             invalidate();
-            this.performClick();
         }
 
         return true;
