@@ -29,6 +29,7 @@
         <attr name="rv_framerate" format="integer"/>
         <attr name="rv_rippleDuration" format="integer"/>
         <attr name="rv_zoomDuration" format="integer" />
+        <attr name="rv_clickFireTime" format="integer" />
         <attr name="rv_color" format="color" />
         <attr name="rv_centered" format="boolean" />
         <attr name="rv_type" format="enum">
