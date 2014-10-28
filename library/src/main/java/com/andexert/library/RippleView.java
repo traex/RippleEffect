@@ -78,6 +78,7 @@ public class RippleView extends RelativeLayout {
             invalidate();
         }
     };
+    private boolean passClickToParent = false;
 
     public RippleView(Context context) {
         super(context);
@@ -109,6 +110,8 @@ public class RippleView extends RelativeLayout {
         canvasHandler = new Handler();
         zoomScale = typedArray.getFloat(R.styleable.RippleView_rv_zoomScale, 1.03f);
         zoomDuration = typedArray.getInt(R.styleable.RippleView_rv_zoomDuration, 200);
+        passClickToParent = typedArray.getBoolean(R.styleable.RippleView_rv_passClickToParent,
+                passClickToParent);
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
@@ -147,7 +150,7 @@ public class RippleView extends RelativeLayout {
                 durationEmpty = -1;
                 timerEmpty = 0;
                 canvas.restore();
-                if (hasParent()) {
+                if (hasParent() && passClickToParent) {
                     View parent = (View) getParent();
                     parent.performClick();
                 }
