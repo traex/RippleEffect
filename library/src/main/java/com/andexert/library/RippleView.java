@@ -211,7 +211,7 @@ public class RippleView extends RelativeLayout {
     private void calculateMaxRadius() {
         radiusMax = Math.max(WIDTH, HEIGHT);
 
-        if (rippleType != 1)
+        if (rippleType == 1)
             radiusMax /= 2;
 
         radiusMax -= ripplePadding;
@@ -240,7 +240,6 @@ public class RippleView extends RelativeLayout {
             this.performClick();
         }
 
-        childView.onTouchEvent(event);
         return true;
     }
 
