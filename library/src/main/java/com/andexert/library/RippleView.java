@@ -34,14 +34,12 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
+import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 /**
@@ -63,7 +61,9 @@ public class RippleView extends RelativeLayout
     private int durationEmpty = -1;
     private float x = -1;
     private float y = -1;
-    private Animation scaleAnimation;
+    private int zoomDuration;
+    private float zoomScale;
+    private ScaleAnimation scaleAnimation;
     private Boolean hasToZoom;
     private Boolean isCentered;
     private Integer rippleType;
@@ -101,6 +101,9 @@ public class RippleView extends RelativeLayout
 
     private void init(final Context context, final AttributeSet attrs)
     {
+        if (isInEditMode())
+            return;
+
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
         rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, getResources().getColor(R.color.rippelColor));
         rippleType = typedArray.getInt(R.styleable.RippleView_rv_type, 0);
@@ -111,8 +114,8 @@ public class RippleView extends RelativeLayout
         PAINT_ALPHA = typedArray.getInteger(R.styleable.RippleView_rv_alpha, PAINT_ALPHA);
         ripplePadding = typedArray.getDimensionPixelSize(R.styleable.RippleView_rv_ripplePadding, 0);
         canvasHandler = new Handler();
-        scaleAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom);
-        scaleAnimation.setDuration(typedArray.getInteger(R.styleable.RippleView_rv_zoomDuration, 150));
+        zoomScale = typedArray.getFloat(R.styleable.RippleView_rv_zoomScale, 1.03f);
+        zoomDuration = typedArray.getInt(R.styleable.RippleView_rv_zoomDuration, 200);
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
@@ -167,6 +170,7 @@ public class RippleView extends RelativeLayout
             if (timer == 0)
                 canvas.save();
 
+
             canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
 
             paint.setColor(getResources().getColor(android.R.color.holo_red_light));
@@ -177,14 +181,12 @@ public class RippleView extends RelativeLayout
                     durationEmpty = DURATION - timer * FRAME_RATE;
 
                 timerEmpty++;
-                final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax)* (((float) timerEmpty * FRAME_RATE) / (durationEmpty))));
+                final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty))));
                 canvas.drawBitmap(tmpBitmap, 0, 0, paint);
                 tmpBitmap.recycle();
             }
 
             paint.setColor(rippleColor);
-
-            timer++;
 
             if (rippleType == 1)
             {
@@ -195,6 +197,8 @@ public class RippleView extends RelativeLayout
             }
             else
                 paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timer * FRAME_RATE) / DURATION))));
+
+            timer++;
         }
     }
 
@@ -204,6 +208,11 @@ public class RippleView extends RelativeLayout
         super.onSizeChanged(w, h, oldw, oldh);
         WIDTH = w;
         HEIGHT = h;
+
+        scaleAnimation = new ScaleAnimation(1.0f, zoomScale, 1.0f, zoomScale, w / 2, h / 2);
+        scaleAnimation.setDuration(zoomDuration);
+        scaleAnimation.setRepeatMode(Animation.REVERSE);
+        scaleAnimation.setRepeatCount(1);
     }
 
     @Override
@@ -238,6 +247,7 @@ public class RippleView extends RelativeLayout
                 originBitmap = getDrawingCache(true);
 
             invalidate();
+            this.performClick();
         }
 
         childView.onTouchEvent(event);
