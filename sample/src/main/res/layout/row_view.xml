@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/holo_green_light"
+        android:background="@drawable/selector_row"
         android:layout_margin="10dp">
 
         <ImageView

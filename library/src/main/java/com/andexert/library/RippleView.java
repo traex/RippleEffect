@@ -34,6 +34,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -126,6 +127,46 @@ public class RippleView extends RelativeLayout
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener()
         {
             @Override
+            public void onLongPress(MotionEvent event)
+            {
+                super.onLongPress(event);
+//                if (!animationRunning)
+//                {
+//                    if (hasToZoom)
+//                        RippleView.this.startAnimation(scaleAnimation);
+//
+//                    radiusMax = Math.max(WIDTH, HEIGHT);
+//
+//                    if (rippleType != 2)
+//                        radiusMax /= 2;
+//
+//                    radiusMax -= ripplePadding;
+//
+//                    if (isCentered || rippleType == 1)
+//                    {
+//                        RippleView.this.x = getMeasuredWidth() / 2;
+//                        RippleView.this.y = getMeasuredHeight() / 2;
+//                    }
+//                    else
+//                    {
+//                        RippleView.this.x = event.getX();
+//                        RippleView.this.y = event.getY();
+//                    }
+//
+//                    animationRunning = true;
+//
+//                    if (rippleType == 1 && originBitmap == null)
+//                        originBitmap = getDrawingCache(true);
+//
+//                    invalidate();
+//                    RippleView.this.performClick();
+//                }
+//
+//                childView.onTouchEvent(event);
+//                Log.e("RippleView", "LongPress");
+            }
+
+            @Override
             public boolean onSingleTapConfirmed(MotionEvent e)
             {
                 return true;
@@ -139,6 +180,7 @@ public class RippleView extends RelativeLayout
         });
 
         this.setDrawingCacheEnabled(true);
+        this.setClickable(true);
     }
 
     @Override
@@ -215,9 +257,50 @@ public class RippleView extends RelativeLayout
         scaleAnimation.setRepeatCount(1);
     }
 
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event)
+//    {
+//        if (gestureDetector.onTouchEvent(event) && !animationRunning)
+//        {
+//            if (hasToZoom)
+//                this.startAnimation(scaleAnimation);
+//
+//            radiusMax = Math.max(WIDTH, HEIGHT);
+//
+//            if (rippleType != 2)
+//                radiusMax /= 2;
+//
+//            radiusMax -= ripplePadding;
+//
+//            if (isCentered || rippleType == 1)
+//            {
+//                this.x = getMeasuredWidth() / 2;
+//                this.y = getMeasuredHeight() / 2;
+//            }
+//            else
+//            {
+//                this.x = event.getX();
+//                this.y = event.getY();
+//            }
+//
+//            animationRunning = true;
+//
+//            if (rippleType == 1 && originBitmap == null)
+//                originBitmap = getDrawingCache(true);
+//
+//            invalidate();
+//            this.performClick();
+//        }
+//
+//        childView.onTouchEvent(event);
+//        return true;
+//    }
+
+
     @Override
-    public boolean onTouchEvent(MotionEvent event)
+    public boolean onInterceptTouchEvent(MotionEvent event)
     {
+        Log.e("RippleView", "intercept : " + event.getActionMasked());
         if (gestureDetector.onTouchEvent(event) && !animationRunning)
         {
             if (hasToZoom)
@@ -247,16 +330,8 @@ public class RippleView extends RelativeLayout
                 originBitmap = getDrawingCache(true);
 
             invalidate();
-            this.performClick();
         }
 
-        childView.onTouchEvent(event);
-        return true;
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event)
-    {
        return true;
     }
 
