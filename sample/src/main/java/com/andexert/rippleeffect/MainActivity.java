@@ -2,8 +2,10 @@ package com.andexert.rippleeffect;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +17,8 @@ import com.andexert.library.RippleView;
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity
+{
 
     private ArrayList<String> sourcesArrayList = new ArrayList<String>();
 
@@ -26,6 +29,9 @@ public class MainActivity extends Activity {
 
         final RippleView rippleView = (RippleView) findViewById(R.id.rect);
         final TextView textView = (TextView) findViewById(R.id.rect_child);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.actionbar);
+
+        setSupportActionBar(toolbar);
 
         rippleView.setOnClickListener(new View.OnClickListener()
         {

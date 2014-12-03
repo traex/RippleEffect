@@ -29,11 +29,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/actionbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@android:color/holo_blue_dark">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize">
 
         <TextView
             android:layout_width="wrap_content"
@@ -79,6 +83,7 @@
         </com.andexert.library.RippleView>
 
     </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
     <com.andexert.library.RippleView
         android:id="@+id/rect"
