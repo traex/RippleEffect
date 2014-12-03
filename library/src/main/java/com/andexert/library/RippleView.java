@@ -130,40 +130,8 @@ public class RippleView extends RelativeLayout
             public void onLongPress(MotionEvent event)
             {
                 super.onLongPress(event);
-//                if (!animationRunning)
-//                {
-//                    if (hasToZoom)
-//                        RippleView.this.startAnimation(scaleAnimation);
-//
-//                    radiusMax = Math.max(WIDTH, HEIGHT);
-//
-//                    if (rippleType != 2)
-//                        radiusMax /= 2;
-//
-//                    radiusMax -= ripplePadding;
-//
-//                    if (isCentered || rippleType == 1)
-//                    {
-//                        RippleView.this.x = getMeasuredWidth() / 2;
-//                        RippleView.this.y = getMeasuredHeight() / 2;
-//                    }
-//                    else
-//                    {
-//                        RippleView.this.x = event.getX();
-//                        RippleView.this.y = event.getY();
-//                    }
-//
-//                    animationRunning = true;
-//
-//                    if (rippleType == 1 && originBitmap == null)
-//                        originBitmap = getDrawingCache(true);
-//
-//                    invalidate();
-//                    RippleView.this.performClick();
-//                }
-//
-//                childView.onTouchEvent(event);
-//                Log.e("RippleView", "LongPress");
+                Log.e("RippleView", "onlongtouch " + event.getActionMasked());
+                animateRipple(event);
             }
 
             @Override
@@ -257,51 +225,19 @@ public class RippleView extends RelativeLayout
         scaleAnimation.setRepeatCount(1);
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event)
-//    {
-//        if (gestureDetector.onTouchEvent(event) && !animationRunning)
-//        {
-//            if (hasToZoom)
-//                this.startAnimation(scaleAnimation);
-//
-//            radiusMax = Math.max(WIDTH, HEIGHT);
-//
-//            if (rippleType != 2)
-//                radiusMax /= 2;
-//
-//            radiusMax -= ripplePadding;
-//
-//            if (isCentered || rippleType == 1)
-//            {
-//                this.x = getMeasuredWidth() / 2;
-//                this.y = getMeasuredHeight() / 2;
-//            }
-//            else
-//            {
-//                this.x = event.getX();
-//                this.y = event.getY();
-//            }
-//
-//            animationRunning = true;
-//
-//            if (rippleType == 1 && originBitmap == null)
-//                originBitmap = getDrawingCache(true);
-//
-//            invalidate();
-//            this.performClick();
-//        }
-//
-//        childView.onTouchEvent(event);
-//        return true;
-//    }
-
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event)
+    public void animateRipple(MotionEvent event)
     {
-        Log.e("RippleView", "intercept : " + event.getActionMasked());
-        if (gestureDetector.onTouchEvent(event) && !animationRunning)
+        createAnimation(event.getX(), event.getY());
+    }
+
+    public void animateRipple(final float x, final float y)
+    {
+        createAnimation(x, y);
+    }
+
+    private void createAnimation(final float x, final float y)
+    {
+        if (!animationRunning)
         {
             if (hasToZoom)
                 this.startAnimation(scaleAnimation);
@@ -320,8 +256,8 @@ public class RippleView extends RelativeLayout
             }
             else
             {
-                this.x = event.getX();
-                this.y = event.getY();
+                this.x = x;
+                this.y = y;
             }
 
             animationRunning = true;
@@ -331,8 +267,21 @@ public class RippleView extends RelativeLayout
 
             invalidate();
         }
+    }
 
-       return true;
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        if (gestureDetector.onTouchEvent(event))
+            animateRipple(event);
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event)
+    {
+        this.onTouchEvent(event);
+        return super.onInterceptTouchEvent(event);
     }
 
     private Bitmap getCircleBitmap(final int radius) {

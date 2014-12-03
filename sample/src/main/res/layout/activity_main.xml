@@ -88,6 +88,8 @@
         android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
         ripple:rv_type="rectangle"
+        android:background="@drawable/selector_row"
+        android:padding="20dp"
         ripple:rv_zoom="true">
 
         <TextView
