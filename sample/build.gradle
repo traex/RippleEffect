@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "com.andexert.rippleeffect"
+        //applicationId "com.andexert.rippleeffect"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
@@ -16,6 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 

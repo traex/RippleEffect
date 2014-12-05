@@ -70,10 +70,9 @@ public class RippleView extends RelativeLayout
     private Paint paint;
     private Bitmap originBitmap;
     private int rippleColor;
-    private View childView;
     private int ripplePadding;
     private GestureDetector gestureDetector;
-    private Runnable runnable = new Runnable()
+    private final Runnable runnable = new Runnable()
     {
         @Override
         public void run()
@@ -149,12 +148,6 @@ public class RippleView extends RelativeLayout
         this.setClickable(true);
     }
 
-    @Override
-    public void addView(View child, int index, ViewGroup.LayoutParams params)
-    {
-        childView = child;
-        super.addView(child, index, params);
-    }
 
     @Override
     public void draw(Canvas canvas)
@@ -266,6 +259,7 @@ public class RippleView extends RelativeLayout
             invalidate();
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
