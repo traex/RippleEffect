@@ -31,6 +31,7 @@
         <attr name="rv_zoomDuration" format="integer" />
         <attr name="rv_color" format="color" />
         <attr name="rv_centered" format="boolean" />
+        <attr name="rv_passClickToParent" format="boolean" />
         <attr name="rv_type" format="enum">
             <enum name="simpleRipple" value="0"/>
             <enum name="doubleRipple" value="1"/>
