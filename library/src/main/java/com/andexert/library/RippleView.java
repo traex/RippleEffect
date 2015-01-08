@@ -40,6 +40,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 /**
@@ -129,6 +132,7 @@ public class RippleView extends RelativeLayout
             {
                 super.onLongPress(event);
                 animateRipple(event);
+                sendClickEvent(true);
             }
 
             @Override
@@ -265,7 +269,10 @@ public class RippleView extends RelativeLayout
     public boolean onTouchEvent(MotionEvent event)
     {
         if (gestureDetector.onTouchEvent(event))
+        {
             animateRipple(event);
+            sendClickEvent(false);
+        }
         return super.onTouchEvent(event);
     }
 
@@ -274,6 +281,25 @@ public class RippleView extends RelativeLayout
     {
         this.onTouchEvent(event);
         return super.onInterceptTouchEvent(event);
+    }
+
+    private void sendClickEvent(final Boolean isLongClick)
+    {
+        if (getParent() instanceof ListView)
+        {
+            final int position = ((ListView) getParent()).getPositionForView(this);
+            final long id = ((ListView) getParent()).getItemIdAtPosition(position);
+            if (isLongClick)
+            {
+                if (((ListView) getParent()).getOnItemLongClickListener() != null)
+                    ((ListView) getParent()).getOnItemLongClickListener().onItemLongClick(((ListView) getParent()), this, position, id);
+            }
+            else
+            {
+                if (((ListView) getParent()).getOnItemClickListener() != null)
+                    ((ListView) getParent()).getOnItemClickListener().onItemClick(((ListView) getParent()), this, position, id);
+            }
+        }
     }
 
     private Bitmap getCircleBitmap(final int radius) {

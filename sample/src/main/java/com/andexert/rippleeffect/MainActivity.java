@@ -1,6 +1,5 @@
 package com.andexert.rippleeffect;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.andexert.library.RippleView;
@@ -19,13 +20,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
 {
-
+    private final Boolean isRecyclerview = true;
     private ArrayList<String> sourcesArrayList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        if (isRecyclerview)
+            setContentView(R.layout.activity_main_recycler);
+        else
+            setContentView(R.layout.activity_main_list);
 
         final RippleView rippleView = (RippleView) findViewById(R.id.rect);
         final TextView textView = (TextView) findViewById(R.id.rect_child);
@@ -66,24 +70,42 @@ public class MainActivity extends ActionBarActivity
         sourcesArrayList.add("Asus");
         sourcesArrayList.add("Apple");
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
 
-        CustomAdapter customAdapter = new CustomAdapter();
-        customAdapter.updateList(sourcesArrayList);
-
-        customAdapter.setOnTapListener(new OnTapListener()
+        if (isRecyclerview)
         {
-            @Override
-            public void onTapView(int position)
-            {
-                Log.e("MainActivity", "Tap item : " + position);
-            }
-        });
-        recyclerView.setAdapter(customAdapter);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            recyclerView.setHasFixedSize(true);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(layoutManager);
 
+            CustomAdapter customAdapter = new CustomAdapter();
+            customAdapter.updateList(sourcesArrayList);
+
+            customAdapter.setOnTapListener(new OnTapListener()
+            {
+                @Override
+                public void onTapView(int position)
+                {
+                    Log.e("MainActivity", "Tap item : " + position);
+                }
+            });
+            recyclerView.setAdapter(customAdapter);
+        }
+        else
+        {
+            ListView listView = (ListView) findViewById(R.id.listview);
+            CustomListViewAdapter customListViewAdapter = new CustomListViewAdapter(this);
+            customListViewAdapter.updateList(sourcesArrayList);
+            listView.setAdapter(customListViewAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    Log.e("MainActivity", "ListView tap item : " + position);
+                }
+            });
+        }
     }
 
 
