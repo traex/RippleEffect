@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
 {
-    private final Boolean isRecyclerview = true;
+    private final Boolean isRecyclerview = false;
     private ArrayList<String> sourcesArrayList = new ArrayList<String>();
 
     @Override
