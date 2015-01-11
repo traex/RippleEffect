@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.bestride.view;
+package com.andexert.library;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -41,7 +41,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
-import com.bestride.waiterwork.R;
+import com.andexert.library.R;
 
 public class RippleView extends RelativeLayout
 {
