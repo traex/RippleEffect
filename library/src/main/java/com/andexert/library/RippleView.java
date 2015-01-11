@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.andexert.library;
+package com.bestride.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -38,13 +38,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.ListView;
+import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
-/**
- * Author :    Chutaux Robin
- * Date :      10/8/2014
- */
+import com.bestride.waiterwork.R;
+
 public class RippleView extends RelativeLayout
 {
     private int WIDTH;
@@ -103,7 +101,7 @@ public class RippleView extends RelativeLayout
             return;
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
-        rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, getResources().getColor(R.color.rippelColor));
+        rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, getResources().getColor(R.color.ripple_color));
         rippleType = typedArray.getInt(R.styleable.RippleView_rv_type, 0);
         hasToZoom = typedArray.getBoolean(R.styleable.RippleView_rv_zoom, false);
         isCentered = typedArray.getBoolean(R.styleable.RippleView_rv_centered, false);
@@ -204,9 +202,9 @@ public class RippleView extends RelativeLayout
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    protected void onSizeChanged(int w, int h, int oldW, int oldH)
     {
-        super.onSizeChanged(w, h, oldw, oldh);
+        super.onSizeChanged(w, h, oldW, oldH);
         WIDTH = w;
         HEIGHT = h;
 
@@ -279,21 +277,18 @@ public class RippleView extends RelativeLayout
         return super.onInterceptTouchEvent(event);
     }
 
-    private void sendClickEvent(final Boolean isLongClick)
+    private <T extends AbsListView> void sendClickEvent(final Boolean isLongClick)
     {
-        if (getParent() instanceof ListView)
-        {
-            final int position = ((ListView) getParent()).getPositionForView(this);
-            final long id = ((ListView) getParent()).getItemIdAtPosition(position);
-            if (isLongClick)
-            {
-                if (((ListView) getParent()).getOnItemLongClickListener() != null)
-                    ((ListView) getParent()).getOnItemLongClickListener().onItemLongClick(((ListView) getParent()), this, position, id);
-            }
-            else
-            {
-                if (((ListView) getParent()).getOnItemClickListener() != null)
-                    ((ListView) getParent()).getOnItemClickListener().onItemClick(((ListView) getParent()), this, position, id);
+        //if (getParent() instanceof ListView)
+        if(AbsListView.class.isAssignableFrom(getParent().getClass())){
+            final int position = ((AbsListView) getParent()).getPositionForView(this);
+            final long id = ((AbsListView) getParent()).getItemIdAtPosition(position);
+            if (isLongClick){
+                if (((AbsListView) getParent()).getOnItemLongClickListener() != null)
+                    ((AbsListView) getParent()).getOnItemLongClickListener().onItemLongClick(((AbsListView) getParent()), this, position, id);
+            }else{
+                if (((AbsListView) getParent()).getOnItemClickListener() != null)
+                    ((AbsListView) getParent()).getOnItemClickListener().onItemClick(((AbsListView) getParent()), this, position, id);
             }
         }
     }
