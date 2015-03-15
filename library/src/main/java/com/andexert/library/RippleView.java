@@ -285,4 +285,12 @@ public class RippleView extends RelativeLayout {
 
         return output;
     }
+	
+	public void setRippleColor(int rippleColor) {
+		this.rippleColor = rippleColor;
+	}
+
+	public int getRippleColor() {
+		return rippleColor;
+	}
 }
