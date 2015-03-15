@@ -31,7 +31,7 @@ Declare a RippleView inside your XML layout file with a content like an ImageVie
   android:layout_height="?android:actionBarSize"
   android:layout_toLeftOf="@+id/more2"
   android:layout_margin="5dp"
-  ripple:rv_centered="true">
+  rv_centered="true">
 
   <ImageView
     android:layout_width="?android:actionBarSize"
