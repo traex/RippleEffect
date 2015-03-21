@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    compileSdkVersion 22
+    buildToolsVersion '22'
 
     defaultConfig {
         //applicationId "com.andexert.rippleeffect"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
     }
     buildTypes {
         release {
@@ -24,10 +24,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(":library")
-    compile 'com.android.support:appcompat-v7:21.0.0'
-    compile 'com.android.support:palette-v7:21.0.0'
-    compile 'com.android.support:recyclerview-v7:21.0.0'
-    compile 'com.android.support:support-v4:21.0.0'
-    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile project(':library')
+    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:palette-v7:22.0.0'
+    compile 'com.android.support:recyclerview-v7:22.0.0'
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.squareup.picasso:picasso:2.5.1'
 }

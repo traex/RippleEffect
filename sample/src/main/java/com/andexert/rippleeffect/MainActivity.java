@@ -45,6 +45,12 @@ public class MainActivity extends ActionBarActivity
                 Log.e("Sample", "Click Rect !");
             }
         });
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                Log.d("Sample", "Ripple completed");
+            }
+        });
         textView.setOnClickListener(new View.OnClickListener()
         {
             @Override
