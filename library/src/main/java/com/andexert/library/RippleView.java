@@ -40,7 +40,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.ListView;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
 
@@ -257,15 +257,16 @@ public class RippleView extends RelativeLayout {
     }
 
     private void sendClickEvent(final Boolean isLongClick) {
-        if (getParent() instanceof ListView) {
-            final int position = ((ListView) getParent()).getPositionForView(this);
-            final long id = ((ListView) getParent()).getItemIdAtPosition(position);
+        if (getParent() instanceof AdapterView) {
+            final AdapterView adapterView = (AdapterView) getParent();
+            final int position = adapterView.getPositionForView(this);
+            final long id = adapterView.getItemIdAtPosition(position);
             if (isLongClick) {
-                if (((ListView) getParent()).getOnItemLongClickListener() != null)
-                    ((ListView) getParent()).getOnItemLongClickListener().onItemLongClick(((ListView) getParent()), this, position, id);
+                if (adapterView.getOnItemLongClickListener() != null)
+                    adapterView.getOnItemLongClickListener().onItemLongClick(adapterView, this, position, id);
             } else {
-                if (((ListView) getParent()).getOnItemClickListener() != null)
-                    ((ListView) getParent()).getOnItemClickListener().onItemClick(((ListView) getParent()), this, position, id);
+                if (adapterView.getOnItemClickListener() != null)
+                    adapterView.getOnItemClickListener().onItemClick(adapterView, this, position, id);
             }
         }
     }
