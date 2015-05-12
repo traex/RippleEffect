@@ -34,6 +34,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -45,16 +46,20 @@ import android.widget.RelativeLayout;
 
 
 /**
- * Author :    Chutaux Robin
- * Date :      10/8/2014
+ * RippleView custom layout
+ *
+ * Custom Layout that allows to use Ripple UI pattern above API 21
+ *
+ * @author Chutaux Robin
+ * @version 2015.0512
  */
 public class RippleView extends RelativeLayout {
 
     private int WIDTH;
     private int HEIGHT;
-    private int FRAME_RATE = 10;
-    private int DURATION = 400;
-    private int PAINT_ALPHA = 90;
+    private int frameRate = 10;
+    private int rippleDuration = 400;
+    private int rippleAlpha = 90;
     private Handler canvasHandler;
     private float radiusMax = 0;
     private boolean animationRunning = false;
@@ -97,6 +102,12 @@ public class RippleView extends RelativeLayout {
         init(context, attrs);
     }
 
+    /**
+     * Method that initializes all fields and sets listeners
+     *
+     * @param context Context used to create this view
+     * @param attrs Attribute used to initialize fields
+     */
     private void init(final Context context, final AttributeSet attrs) {
         if (isInEditMode())
             return;
@@ -106,9 +117,9 @@ public class RippleView extends RelativeLayout {
         rippleType = typedArray.getInt(R.styleable.RippleView_rv_type, 0);
         hasToZoom = typedArray.getBoolean(R.styleable.RippleView_rv_zoom, false);
         isCentered = typedArray.getBoolean(R.styleable.RippleView_rv_centered, false);
-        DURATION = typedArray.getInteger(R.styleable.RippleView_rv_rippleDuration, DURATION);
-        FRAME_RATE = typedArray.getInteger(R.styleable.RippleView_rv_framerate, FRAME_RATE);
-        PAINT_ALPHA = typedArray.getInteger(R.styleable.RippleView_rv_alpha, PAINT_ALPHA);
+        rippleDuration = typedArray.getInteger(R.styleable.RippleView_rv_rippleDuration, rippleDuration);
+        frameRate = typedArray.getInteger(R.styleable.RippleView_rv_framerate, frameRate);
+        rippleAlpha = typedArray.getInteger(R.styleable.RippleView_rv_alpha, rippleAlpha);
         ripplePadding = typedArray.getDimensionPixelSize(R.styleable.RippleView_rv_ripplePadding, 0);
         canvasHandler = new Handler();
         zoomScale = typedArray.getFloat(R.styleable.RippleView_rv_zoomScale, 1.03f);
@@ -118,7 +129,7 @@ public class RippleView extends RelativeLayout {
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(rippleColor);
-        paint.setAlpha(PAINT_ALPHA);
+        paint.setAlpha(rippleAlpha);
         this.setWillNotDraw(false);
 
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -144,12 +155,11 @@ public class RippleView extends RelativeLayout {
         this.setClickable(true);
     }
 
-
     @Override
     public void draw(@NonNull Canvas canvas) {
         super.draw(canvas);
         if (animationRunning) {
-            if (DURATION <= timer * FRAME_RATE) {
+            if (rippleDuration <= timer * frameRate) {
                 animationRunning = false;
                 timer = 0;
                 durationEmpty = -1;
@@ -159,22 +169,22 @@ public class RippleView extends RelativeLayout {
                 if (onCompletionListener != null) onCompletionListener.onComplete(this);
                 return;
             } else
-                canvasHandler.postDelayed(runnable, FRAME_RATE);
+                canvasHandler.postDelayed(runnable, frameRate);
 
             if (timer == 0)
                 canvas.save();
 
 
-            canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
+            canvas.drawCircle(x, y, (radiusMax * (((float) timer * frameRate) / rippleDuration)), paint);
 
             paint.setColor(Color.parseColor("#ffff4444"));
 
-            if (rippleType == 1 && originBitmap != null && (((float) timer * FRAME_RATE) / DURATION) > 0.4f) {
+            if (rippleType == 1 && originBitmap != null && (((float) timer * frameRate) / rippleDuration) > 0.4f) {
                 if (durationEmpty == -1)
-                    durationEmpty = DURATION - timer * FRAME_RATE;
+                    durationEmpty = rippleDuration - timer * frameRate;
 
                 timerEmpty++;
-                final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty))));
+                final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax) * (((float) timerEmpty * frameRate) / (durationEmpty))));
                 canvas.drawBitmap(tmpBitmap, 0, 0, paint);
                 tmpBitmap.recycle();
             }
@@ -182,13 +192,13 @@ public class RippleView extends RelativeLayout {
             paint.setColor(rippleColor);
 
             if (rippleType == 1) {
-                if ((((float) timer * FRAME_RATE) / DURATION) > 0.6f)
-                    paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty)))));
+                if ((((float) timer * frameRate) / rippleDuration) > 0.6f)
+                    paint.setAlpha((int) (rippleAlpha - ((rippleAlpha) * (((float) timerEmpty * frameRate) / (durationEmpty)))));
                 else
-                    paint.setAlpha(PAINT_ALPHA);
+                    paint.setAlpha(rippleAlpha);
             }
             else
-                paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timer * FRAME_RATE) / DURATION))));
+                paint.setAlpha((int) (rippleAlpha - ((rippleAlpha) * (((float) timer * frameRate) / rippleDuration))));
 
             timer++;
         }
@@ -206,14 +216,31 @@ public class RippleView extends RelativeLayout {
         scaleAnimation.setRepeatCount(1);
     }
 
+    /**
+     * Launch Ripple animation for the current view with a MotionEvent
+     *
+     * @param event MotionEvent registered by the Ripple gesture listener
+     */
     public void animateRipple(MotionEvent event) {
         createAnimation(event.getX(), event.getY());
     }
 
+    /**
+     * Launch Ripple animation for the current view centered at x and y position
+     *
+     * @param x Horizontal position of the ripple center
+     * @param y Vertical position of the ripple center
+     */
     public void animateRipple(final float x, final float y) {
         createAnimation(x, y);
     }
 
+    /**
+     * Create Ripple animation centered at x, y
+     *
+     * @param x Horizontal position of the ripple center
+     * @param y Vertical position of the ripple center
+     */
     private void createAnimation(final float x, final float y) {
         if (!animationRunning) {
             if (hasToZoom)
@@ -243,7 +270,6 @@ public class RippleView extends RelativeLayout {
         }
     }
 
-
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (gestureDetector.onTouchEvent(event)) {
@@ -259,6 +285,11 @@ public class RippleView extends RelativeLayout {
         return super.onInterceptTouchEvent(event);
     }
 
+    /**
+     * Send a click event if parent view is a Listview instance
+     *
+     * @param isLongClick Is the event a long click ?
+     */
     private void sendClickEvent(final Boolean isLongClick) {
         if (getParent() instanceof ListView) {
             final int position = ((ListView) getParent()).getPositionForView(this);
@@ -288,21 +319,177 @@ public class RippleView extends RelativeLayout {
 
         return output;
     }
-	
+
+    /**
+     * Set Ripple color, default is #FFFFFF
+     *
+     * @param rippleColor New color resource
+     */
+    @ColorRes
 	public void setRippleColor(int rippleColor) {
-		this.rippleColor = rippleColor;
+		this.rippleColor = getResources().getColor(rippleColor);
 	}
 
 	public int getRippleColor() {
 		return rippleColor;
 	}
 
+    public RippleType getRippleType()
+    {
+        return RippleType.values()[rippleType];
+    }
+
+    /**
+     * Set Ripple type, default is RippleType.SIMPLE
+     *
+     * @param rippleType New Ripple type for next animation
+     */
+    public void setRippleType(final RippleType rippleType)
+    {
+        this.rippleType = rippleType.ordinal();
+    }
+
+    public Boolean isCentered()
+    {
+        return isCentered;
+    }
+
+    /**
+     * Set if ripple animation has to be centered in its parent view or not, default is False
+     *
+     * @param isCentered
+     */
+    public void setCentered(final Boolean isCentered)
+    {
+        this.isCentered = isCentered;
+    }
+
+    public int getRipplePadding()
+    {
+        return ripplePadding;
+    }
+
+    /**
+     * Set Ripple padding if you want to avoid some graphic glitch
+     *
+     * @param ripplePadding New Ripple padding in pixel, default is 0px
+     */
+    public void setRipplePadding(int ripplePadding)
+    {
+        this.ripplePadding = ripplePadding;
+    }
+
+    public Boolean isZooming()
+    {
+        return hasToZoom;
+    }
+
+    /**
+     * At the end of Ripple effect, the child views has to zoom
+     *
+     * @param hasToZoom Do the child views have to zoom ? default is False
+     */
+    public void setZooming(Boolean hasToZoom)
+    {
+        this.hasToZoom = hasToZoom;
+    }
+
+    public float getZoomScale()
+    {
+        return zoomScale;
+    }
+
+    /**
+     * Scale of the end animation
+     *
+     * @param zoomScale Value of scale animation, default is 1.03f
+     */
+    public void setZoomScale(float zoomScale)
+    {
+        this.zoomScale = zoomScale;
+    }
+
+    public int getZoomDuration()
+    {
+        return zoomDuration;
+    }
+
+    /**
+     * Duration of the ending animation in ms
+     *
+     * @param zoomDuration Duration, default is 200ms
+     */
+    public void setZoomDuration(int zoomDuration)
+    {
+        this.zoomDuration = zoomDuration;
+    }
+
+    public int getRippleDuration()
+    {
+        return rippleDuration;
+    }
+
+    /**
+     * Duration of the Ripple animation in ms
+     *
+     * @param rippleDuration Duration, default is 400ms
+     */
+    public void setRippleDuration(int rippleDuration)
+    {
+        this.rippleDuration = rippleDuration;
+    }
+
+    public int getFrameRate()
+    {
+        return frameRate;
+    }
+
+    /**
+     * Set framerate for Ripple animation
+     *
+     * @param frameRate New framerate value, default is 10
+     */
+    public void setFrameRate(int frameRate)
+    {
+        this.frameRate = frameRate;
+    }
+
+    public int getRippleAlpha()
+    {
+        return rippleAlpha;
+    }
+
+    /**
+     * Set alpha for ripple effect color
+     *
+     * @param rippleAlpha Alpha value between 0 and 255, default is 90
+     */
+    public void setRippleAlpha(int rippleAlpha)
+    {
+        this.rippleAlpha = rippleAlpha;
+    }
+
     public void setOnRippleCompleteListener(OnRippleCompleteListener listener) {
         this.onCompletionListener = listener;
     }
 
-    public static interface OnRippleCompleteListener {
+    /**
+     * Defines a callback called at the end of the Ripple effect
+     */
+    public interface OnRippleCompleteListener {
+        void onComplete(RippleView rippleView);
+    }
 
-        public void onComplete(RippleView rippleView);
+    public enum RippleType {
+        SIMPLE(0),
+        DOUBLE(1),
+        RECTANGLE(2);
+
+        int type;
+
+        RippleType(int type)
+        {
+            this.type = type;
+        }
     }
 }
