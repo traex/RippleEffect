@@ -52,9 +52,9 @@ public class RippleView extends RelativeLayout {
 
     private int WIDTH;
     private int HEIGHT;
-    private int FRAME_RATE = 10;
-    private int DURATION = 400;
-    private int PAINT_ALPHA = 90;
+    private int frameRate = 10;
+    private int rippleDuration = 400;
+    private int rippleAlpha = 90;
     private Handler canvasHandler;
     private float radiusMax = 0;
     private boolean animationRunning = false;
@@ -106,9 +106,9 @@ public class RippleView extends RelativeLayout {
         rippleType = typedArray.getInt(R.styleable.RippleView_rv_type, 0);
         hasToZoom = typedArray.getBoolean(R.styleable.RippleView_rv_zoom, false);
         isCentered = typedArray.getBoolean(R.styleable.RippleView_rv_centered, false);
-        DURATION = typedArray.getInteger(R.styleable.RippleView_rv_rippleDuration, DURATION);
-        FRAME_RATE = typedArray.getInteger(R.styleable.RippleView_rv_framerate, FRAME_RATE);
-        PAINT_ALPHA = typedArray.getInteger(R.styleable.RippleView_rv_alpha, PAINT_ALPHA);
+        rippleDuration = typedArray.getInteger(R.styleable.RippleView_rv_rippleDuration, rippleDuration);
+        frameRate = typedArray.getInteger(R.styleable.RippleView_rv_framerate, frameRate);
+        rippleAlpha = typedArray.getInteger(R.styleable.RippleView_rv_alpha, rippleAlpha);
         ripplePadding = typedArray.getDimensionPixelSize(R.styleable.RippleView_rv_ripplePadding, 0);
         canvasHandler = new Handler();
         zoomScale = typedArray.getFloat(R.styleable.RippleView_rv_zoomScale, 1.03f);
@@ -118,7 +118,7 @@ public class RippleView extends RelativeLayout {
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(rippleColor);
-        paint.setAlpha(PAINT_ALPHA);
+        paint.setAlpha(rippleAlpha);
         this.setWillNotDraw(false);
 
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -148,7 +148,7 @@ public class RippleView extends RelativeLayout {
     public void draw(@NonNull Canvas canvas) {
         super.draw(canvas);
         if (animationRunning) {
-            if (DURATION <= timer * FRAME_RATE) {
+            if (rippleDuration <= timer * frameRate) {
                 animationRunning = false;
                 timer = 0;
                 durationEmpty = -1;
@@ -158,22 +158,22 @@ public class RippleView extends RelativeLayout {
                 if (onCompletionListener != null) onCompletionListener.onComplete(this);
                 return;
             } else
-                canvasHandler.postDelayed(runnable, FRAME_RATE);
+                canvasHandler.postDelayed(runnable, frameRate);
 
             if (timer == 0)
                 canvas.save();
 
 
-            canvas.drawCircle(x, y, (radiusMax * (((float) timer * FRAME_RATE) / DURATION)), paint);
+            canvas.drawCircle(x, y, (radiusMax * (((float) timer * frameRate) / rippleDuration)), paint);
 
             paint.setColor(Color.parseColor("#ffff4444"));
 
-            if (rippleType == 1 && originBitmap != null && (((float) timer * FRAME_RATE) / DURATION) > 0.4f) {
+            if (rippleType == 1 && originBitmap != null && (((float) timer * frameRate) / rippleDuration) > 0.4f) {
                 if (durationEmpty == -1)
-                    durationEmpty = DURATION - timer * FRAME_RATE;
+                    durationEmpty = rippleDuration - timer * frameRate;
 
                 timerEmpty++;
-                final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty))));
+                final Bitmap tmpBitmap = getCircleBitmap((int) ((radiusMax) * (((float) timerEmpty * frameRate) / (durationEmpty))));
                 canvas.drawBitmap(tmpBitmap, 0, 0, paint);
                 tmpBitmap.recycle();
             }
@@ -181,13 +181,13 @@ public class RippleView extends RelativeLayout {
             paint.setColor(rippleColor);
 
             if (rippleType == 1) {
-                if ((((float) timer * FRAME_RATE) / DURATION) > 0.6f)
-                    paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timerEmpty * FRAME_RATE) / (durationEmpty)))));
+                if ((((float) timer * frameRate) / rippleDuration) > 0.6f)
+                    paint.setAlpha((int) (rippleAlpha - ((rippleAlpha) * (((float) timerEmpty * frameRate) / (durationEmpty)))));
                 else
-                    paint.setAlpha(PAINT_ALPHA);
+                    paint.setAlpha(rippleAlpha);
             }
             else
-                paint.setAlpha((int) (PAINT_ALPHA - ((PAINT_ALPHA) * (((float) timer * FRAME_RATE) / DURATION))));
+                paint.setAlpha((int) (rippleAlpha - ((rippleAlpha) * (((float) timer * frameRate) / rippleDuration))));
 
             timer++;
         }
@@ -300,18 +300,97 @@ public class RippleView extends RelativeLayout {
         return RippleType.values()[rippleType];
     }
 
-    public void setRippleType(RippleType rippleType)
+    public void setRippleType(final RippleType rippleType)
     {
         this.rippleType = rippleType.ordinal();
+    }
+
+    public Boolean isCentered()
+    {
+        return isCentered;
+    }
+
+    public void setCentered(final Boolean isCentered)
+    {
+        this.isCentered = isCentered;
+    }
+
+    public int getRipplePadding()
+    {
+        return ripplePadding;
+    }
+
+    public void setRipplePadding(int ripplePadding)
+    {
+        this.ripplePadding = ripplePadding;
+    }
+
+    public Boolean isZooming()
+    {
+        return hasToZoom;
+    }
+
+    public void setZooming(Boolean hasToZoom)
+    {
+        this.hasToZoom = hasToZoom;
+    }
+
+    public float getZoomScale()
+    {
+        return zoomScale;
+    }
+
+    public void setZoomScale(float zoomScale)
+    {
+        this.zoomScale = zoomScale;
+    }
+
+    public int getZoomDuration()
+    {
+        return zoomDuration;
+    }
+
+    public void setZoomDuration(int zoomDuration)
+    {
+        this.zoomDuration = zoomDuration;
+    }
+
+    public int getRippleDuration()
+    {
+        return rippleDuration;
+    }
+
+    public void setRippleDuration(int rippleDuration)
+    {
+        this.rippleDuration = rippleDuration;
+    }
+
+    public int getFrameRate()
+    {
+        return frameRate;
+    }
+
+    public void setFrameRate(int frameRate)
+    {
+        this.frameRate = frameRate;
+    }
+
+    public int getRippleAlpha()
+    {
+        return rippleAlpha;
+    }
+
+    public void setRippleAlpha(int rippleAlpha)
+    {
+        this.rippleAlpha = rippleAlpha;
     }
 
     public void setOnRippleCompleteListener(OnRippleCompleteListener listener) {
         this.onCompletionListener = listener;
     }
 
-    public static interface OnRippleCompleteListener {
-
-        public void onComplete(RippleView rippleView);
+    public interface OnRippleCompleteListener {
+        void onComplete(RippleView rippleView);
     }
 
     public enum RippleType {
