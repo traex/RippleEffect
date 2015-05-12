@@ -242,7 +242,7 @@ public class RippleView extends RelativeLayout {
      * @param y Vertical position of the ripple center
      */
     private void createAnimation(final float x, final float y) {
-        if (!animationRunning) {
+        if (this.isEnabled() && !animationRunning) {
             if (hasToZoom)
                 this.startAnimation(scaleAnimation);
 
