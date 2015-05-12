@@ -34,6 +34,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -45,8 +46,12 @@ import android.widget.RelativeLayout;
 
 
 /**
- * Author :    Chutaux Robin
- * Date :      10/8/2014
+ * RippleView custom layout
+ *
+ * Custom Layout that allows to use Ripple UI pattern above API 21
+ *
+ * @author Chutaux Robin
+ * @version 2015.0512
  */
 public class RippleView extends RelativeLayout {
 
@@ -97,6 +102,12 @@ public class RippleView extends RelativeLayout {
         init(context, attrs);
     }
 
+    /**
+     * Method that initializes all fields and sets listeners
+     *
+     * @param context Context used to create this view
+     * @param attrs Attribute used to initialize fields
+     */
     private void init(final Context context, final AttributeSet attrs) {
         if (isInEditMode())
             return;
@@ -205,14 +216,31 @@ public class RippleView extends RelativeLayout {
         scaleAnimation.setRepeatCount(1);
     }
 
+    /**
+     * Launch Ripple animation for the current view with a MotionEvent
+     *
+     * @param event MotionEvent registered by the Ripple gesture listener
+     */
     public void animateRipple(MotionEvent event) {
         createAnimation(event.getX(), event.getY());
     }
 
+    /**
+     * Launch Ripple animation for the current view centered at x and y position
+     *
+     * @param x Horizontal position of the ripple center
+     * @param y Vertical position of the ripple center
+     */
     public void animateRipple(final float x, final float y) {
         createAnimation(x, y);
     }
 
+    /**
+     * Create Ripple animation centered at x, y
+     *
+     * @param x Horizontal position of the ripple center
+     * @param y Vertical position of the ripple center
+     */
     private void createAnimation(final float x, final float y) {
         if (!animationRunning) {
             if (hasToZoom)
@@ -257,6 +285,11 @@ public class RippleView extends RelativeLayout {
         return super.onInterceptTouchEvent(event);
     }
 
+    /**
+     * Send a click event if parent view is a Listview instance
+     *
+     * @param isLongClick Is the event a long click ?
+     */
     private void sendClickEvent(final Boolean isLongClick) {
         if (getParent() instanceof ListView) {
             final int position = ((ListView) getParent()).getPositionForView(this);
@@ -286,9 +319,15 @@ public class RippleView extends RelativeLayout {
 
         return output;
     }
-	
+
+    /**
+     * Set Ripple color, default is #FFFFFF
+     *
+     * @param rippleColor New color resource
+     */
+    @ColorRes
 	public void setRippleColor(int rippleColor) {
-		this.rippleColor = rippleColor;
+		this.rippleColor = getResources().getColor(rippleColor);
 	}
 
 	public int getRippleColor() {
@@ -300,6 +339,11 @@ public class RippleView extends RelativeLayout {
         return RippleType.values()[rippleType];
     }
 
+    /**
+     * Set Ripple type, default is RippleType.SIMPLE
+     *
+     * @param rippleType New Ripple type for next animation
+     */
     public void setRippleType(final RippleType rippleType)
     {
         this.rippleType = rippleType.ordinal();
@@ -310,6 +354,11 @@ public class RippleView extends RelativeLayout {
         return isCentered;
     }
 
+    /**
+     * Set if ripple animation has to be centered in its parent view or not, default is False
+     *
+     * @param isCentered
+     */
     public void setCentered(final Boolean isCentered)
     {
         this.isCentered = isCentered;
@@ -320,6 +369,11 @@ public class RippleView extends RelativeLayout {
         return ripplePadding;
     }
 
+    /**
+     * Set Ripple padding if you want to avoid some graphic glitch
+     *
+     * @param ripplePadding New Ripple padding in pixel, default is 0px
+     */
     public void setRipplePadding(int ripplePadding)
     {
         this.ripplePadding = ripplePadding;
@@ -330,6 +384,11 @@ public class RippleView extends RelativeLayout {
         return hasToZoom;
     }
 
+    /**
+     * At the end of Ripple effect, the child views has to zoom
+     *
+     * @param hasToZoom Do the child views have to zoom ? default is False
+     */
     public void setZooming(Boolean hasToZoom)
     {
         this.hasToZoom = hasToZoom;
@@ -340,6 +399,11 @@ public class RippleView extends RelativeLayout {
         return zoomScale;
     }
 
+    /**
+     * Scale of the end animation
+     *
+     * @param zoomScale Value of scale animation, default is 1.03f
+     */
     public void setZoomScale(float zoomScale)
     {
         this.zoomScale = zoomScale;
@@ -350,6 +414,11 @@ public class RippleView extends RelativeLayout {
         return zoomDuration;
     }
 
+    /**
+     * Duration of the ending animation in ms
+     *
+     * @param zoomDuration Duration, default is 200ms
+     */
     public void setZoomDuration(int zoomDuration)
     {
         this.zoomDuration = zoomDuration;
@@ -360,6 +429,11 @@ public class RippleView extends RelativeLayout {
         return rippleDuration;
     }
 
+    /**
+     * Duration of the Ripple animation in ms
+     *
+     * @param rippleDuration Duration, default is 400ms
+     */
     public void setRippleDuration(int rippleDuration)
     {
         this.rippleDuration = rippleDuration;
@@ -370,6 +444,11 @@ public class RippleView extends RelativeLayout {
         return frameRate;
     }
 
+    /**
+     * Set framerate for Ripple animation
+     *
+     * @param frameRate New framerate value, default is 10
+     */
     public void setFrameRate(int frameRate)
     {
         this.frameRate = frameRate;
@@ -380,6 +459,11 @@ public class RippleView extends RelativeLayout {
         return rippleAlpha;
     }
 
+    /**
+     * Set alpha for ripple effect color
+     *
+     * @param rippleAlpha Alpha value between 0 and 255, default is 90
+     */
     public void setRippleAlpha(int rippleAlpha)
     {
         this.rippleAlpha = rippleAlpha;
@@ -389,6 +473,9 @@ public class RippleView extends RelativeLayout {
         this.onCompletionListener = listener;
     }
 
+    /**
+     * Defines a callback called at the end of the Ripple effect
+     */
     public interface OnRippleCompleteListener {
         void onComplete(RippleView rippleView);
     }
