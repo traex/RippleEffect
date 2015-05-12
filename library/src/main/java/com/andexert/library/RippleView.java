@@ -35,7 +35,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -156,7 +155,7 @@ public class RippleView extends RelativeLayout {
     }
 
     @Override
-    public void draw(@NonNull Canvas canvas) {
+    public void draw(Canvas canvas) {
         super.draw(canvas);
         if (animationRunning) {
             if (rippleDuration <= timer * frameRate) {
@@ -271,7 +270,7 @@ public class RippleView extends RelativeLayout {
     }
 
     @Override
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         if (gestureDetector.onTouchEvent(event)) {
             animateRipple(event);
             sendClickEvent(false);
