@@ -144,7 +144,6 @@ public class RippleView extends RelativeLayout {
         this.setClickable(true);
     }
 
-
     @Override
     public void draw(@NonNull Canvas canvas) {
         super.draw(canvas);
@@ -243,7 +242,6 @@ public class RippleView extends RelativeLayout {
         }
     }
 
-
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (gestureDetector.onTouchEvent(event)) {
@@ -297,6 +295,16 @@ public class RippleView extends RelativeLayout {
 		return rippleColor;
 	}
 
+    public RippleType getRippleType()
+    {
+        return RippleType.values()[rippleType];
+    }
+
+    public void setRippleType(RippleType rippleType)
+    {
+        this.rippleType = rippleType.ordinal();
+    }
+
     public void setOnRippleCompleteListener(OnRippleCompleteListener listener) {
         this.onCompletionListener = listener;
     }
@@ -304,5 +312,18 @@ public class RippleView extends RelativeLayout {
     public static interface OnRippleCompleteListener {
 
         public void onComplete(RippleView rippleView);
+    }
+
+    public enum RippleType {
+        SIMPLE(0),
+        DOUBLE(1),
+        RECTANGLE(2);
+
+        int type;
+
+        RippleType(int type)
+        {
+            this.type = type;
+        }
     }
 }
