@@ -81,6 +81,8 @@ public class RippleView extends RelativeLayout {
         }
     };
 
+    private OnRippleCompleteListener onCompletionListener;
+
     public RippleView(Context context) {
         super(context);
     }
@@ -154,6 +156,7 @@ public class RippleView extends RelativeLayout {
                 timerEmpty = 0;
                 canvas.restore();
                 invalidate();
+                if (onCompletionListener != null) onCompletionListener.onComplete(this);
                 return;
             } else
                 canvasHandler.postDelayed(runnable, FRAME_RATE);
@@ -293,4 +296,13 @@ public class RippleView extends RelativeLayout {
 	public int getRippleColor() {
 		return rippleColor;
 	}
+
+    public void setOnRippleCompleteListener(OnRippleCompleteListener listener) {
+        this.onCompletionListener = listener;
+    }
+
+    public static interface OnRippleCompleteListener {
+
+        public void onComplete(RippleView rippleView);
+    }
 }
