@@ -13,7 +13,7 @@ The lib is available on Maven Central, you can find it with [Gradle, please](htt
 ``` xml
 
 dependencies {
-    compile 'com.github.traex.rippleeffect:library:1.2.4'
+    compile 'com.github.traex.rippleeffect:library:1.3'
 }
 
 ```
@@ -44,6 +44,18 @@ Declare a RippleView inside your XML layout file with a content like an ImageVie
 </com.andexert.library.RippleView>
 ```
 
+If you want to know when the Ripple effect is finished, you can set a listener on your view
+```
+rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
+    @Override
+    public void onComplete(RippleView rippleView) {
+        Log.d("Sample", "Ripple completed");
+    }
+
+});
+```
+
 ### Customization
 
 You can change several attributes in the XML file, you have to remove "rv_" if you are using a version below v1.1.1 :
@@ -58,6 +70,8 @@ You can change several attributes in the XML file, you have to remove "rv_" if y
 * app:rv_zoom [boolean def:false] --> Enable zoom animation
 * app:rv_zoomDuration [integer def:150] --> Duration of zoom animation
 * app:rv_zoomScale [float def:1.03] --> Scale of zoom animation
+
+For each attribute you can use getters and setters to change values dynamically.
 
 ### Troubleshooting
 
