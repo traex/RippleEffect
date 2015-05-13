@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 
@@ -43,6 +44,12 @@ public class MainActivity extends ActionBarActivity
             public void onClick(View v)
             {
                 Log.e("Sample", "Click Rect !");
+            }
+        });
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                Log.d("Sample", "Ripple completed");
             }
         });
         textView.setOnClickListener(new View.OnClickListener()
@@ -81,15 +88,19 @@ public class MainActivity extends ActionBarActivity
             CustomAdapter customAdapter = new CustomAdapter();
             customAdapter.updateList(sourcesArrayList);
 
-            customAdapter.setOnTapListener(new OnTapListener()
-            {
+            customAdapter.setOnTapListener(new OnTapListener() {
                 @Override
-                public void onTapView(int position)
-                {
+                public void onTapView(int position) {
                     Log.e("MainActivity", "Tap item : " + position);
                 }
             });
             recyclerView.setAdapter(customAdapter);
+            customAdapter.setOnTapListener(new OnTapListener() {
+                @Override
+                public void onTapView(int position) {
+                    Toast.makeText(getApplicationContext(), "performClick", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         else
         {
@@ -97,12 +108,16 @@ public class MainActivity extends ActionBarActivity
             CustomListViewAdapter customListViewAdapter = new CustomListViewAdapter(this);
             customListViewAdapter.updateList(sourcesArrayList);
             listView.setAdapter(customListViewAdapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.e("MainActivity", "ListView tap item : " + position);
+                }
+            });
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getApplicationContext(), "performClick", Toast.LENGTH_SHORT).show();
                 }
             });
         }
