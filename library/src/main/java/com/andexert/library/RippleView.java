@@ -78,6 +78,7 @@ public class RippleView extends RelativeLayout {
     private int rippleColor;
     private int ripplePadding;
     private GestureDetector gestureDetector;
+    private int canvasSaveCount;
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -152,6 +153,7 @@ public class RippleView extends RelativeLayout {
 
         this.setDrawingCacheEnabled(true);
         this.setClickable(true);
+        canvasSaveCount = -1;
     }
 
     @Override
@@ -163,15 +165,19 @@ public class RippleView extends RelativeLayout {
                 timer = 0;
                 durationEmpty = -1;
                 timerEmpty = 0;
-                canvas.restore();
+                if(canvasSaveCount != -1) {
+                    canvas.restoreToCount(canvasSaveCount);
+                    canvasSaveCount = -1;
+                }
                 invalidate();
                 if (onCompletionListener != null) onCompletionListener.onComplete(this);
                 return;
             } else
                 canvasHandler.postDelayed(runnable, frameRate);
 
-            if (timer == 0)
-                canvas.save();
+            if (timer == 0) {
+                canvasSaveCount = canvas.save();
+            }
 
 
             canvas.drawCircle(x, y, (radiusMax * (((float) timer * frameRate) / rippleDuration)), paint);
@@ -493,3 +499,4 @@ public class RippleView extends RelativeLayout {
         }
     }
 }
+
