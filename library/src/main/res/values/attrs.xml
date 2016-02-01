@@ -39,6 +39,7 @@
         <attr name="rv_ripplePadding" format="dimension" />
         <attr name="rv_zoom" format="boolean" />
         <attr name="rv_zoomScale" format="float" />
+        <attr name="rv_rippleDelayClick" format="boolean" />
 
     </declare-styleable>
 </resources>

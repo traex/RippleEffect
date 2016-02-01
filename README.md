@@ -64,6 +64,7 @@ You can change several attributes in the XML file, you have to remove "rv_" if y
 * app:rv_framerate [integer def:10] --> Frame rate of the ripple animation
 * app:rv_rippleDuration [integer def:400] --> Duration of the ripple animation
 * app:rv_ripplePadding [dimension def:0] --> Add a padding to the ripple
+* app:rv_rippleDelayClick [boolean def:false] --> "true" means onLick event will be invoked after animation.
 * app:rv_color [color def:@android:color/white] --> Color of the ripple
 * app:rv_centered [boolean def:false] --> Center ripple in the child view
 * app:rv_type [enum (simpleRipple, doubleRipple) def:simpleRipple] --> Simple or double ripple

@@ -4,7 +4,8 @@
                 xmlns:ripple="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ripple:rv_type="rectangle">
+                ripple:rv_type="rectangle"
+                ripple:rv_rippleDelayClick="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
