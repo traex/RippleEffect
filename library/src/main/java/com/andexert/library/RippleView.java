@@ -167,7 +167,11 @@ public class RippleView extends RelativeLayout {
                 timer = 0;
                 durationEmpty = -1;
                 timerEmpty = 0;
-                canvas.restore();
+                try {
+                    canvas.restore();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 invalidate();
                 if (rippleDelayClick) {
                     sendClickEvent(false);
