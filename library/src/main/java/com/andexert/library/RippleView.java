@@ -158,6 +158,7 @@ public class RippleView extends RelativeLayout {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (animationRunning) {
+            canvas.save();
             if (rippleDuration <= timer * frameRate) {
                 animationRunning = false;
                 timer = 0;
