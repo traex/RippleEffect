@@ -45,16 +45,28 @@ Declare a RippleView inside your XML layout file with a content like an ImageVie
 ```
 
 If you want to know when the Ripple effect is finished, you can set a listener on your view
-```
-rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+``` java
+    rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-    @Override
-    public void onComplete(RippleView rippleView) {
-        Log.d("Sample", "Ripple completed");
-    }
+        @Override
+        public void onComplete(RippleView rippleView) {
+            Log.d("Sample", "Ripple completed");
+        }
 
-});
+    });
 ```
+
+If you want to add an `OnClickListener` don't forget to add it to the RippleView like this:
+``` java
+    final RippleView rippleView = (RippleView) findViewById(R.id.rippleView);
+    rippleView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //TODO: onRippleViewClick
+        }
+    });
+```
+
 
 ### Customization
 
