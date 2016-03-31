@@ -33,7 +33,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
 import android.util.AttributeSet;
@@ -165,11 +164,7 @@ public class RippleView extends RelativeLayout {
                 timer = 0;
                 durationEmpty = -1;
                 timerEmpty = 0;
-                // There is problem on Android M where canvas.restore() seems to be called automatically
-                // For now, don't call canvas.restore() manually on Android M (API 23)
-                if(Build.VERSION.SDK_INT != 23) {
-                    canvas.restore();
-                }
+                canvas.restoreToCount(canvas.getSaveCount());
                 invalidate();
                 if (onCompletionListener != null) onCompletionListener.onComplete(this);
                 return;
