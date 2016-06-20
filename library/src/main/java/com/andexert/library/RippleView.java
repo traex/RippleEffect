@@ -166,8 +166,8 @@ public class RippleView extends RelativeLayout {
                 durationEmpty = -1;
                 timerEmpty = 0;
                 // There is problem on Android M where canvas.restore() seems to be called automatically
-                // For now, don't call canvas.restore() manually on Android M (API 23)
-                if(Build.VERSION.SDK_INT != 23) {
+                // For now, don't call canvas.restore() manually on Android M (API 23 And 24 and API)
+                if(Build.VERSION.SDK_INT < 23) {
                     canvas.restore();
                 }
                 invalidate();
