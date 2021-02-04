@@ -30,6 +30,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -39,6 +40,7 @@ import android.support.annotation.ColorRes;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
@@ -78,6 +80,7 @@ public class RippleView extends RelativeLayout {
     private Bitmap originBitmap;
     private int rippleColor;
     private int ripplePadding;
+    private boolean rippleDelayClick;
     private GestureDetector gestureDetector;
     private final Runnable runnable = new Runnable() {
         @Override
@@ -124,6 +127,7 @@ public class RippleView extends RelativeLayout {
         canvasHandler = new Handler();
         zoomScale = typedArray.getFloat(R.styleable.RippleView_rv_zoomScale, 1.03f);
         zoomDuration = typedArray.getInt(R.styleable.RippleView_rv_zoomDuration, 200);
+        rippleDelayClick = typedArray.getBoolean(R.styleable.RippleView_rv_rippleDelayClick, true);
         typedArray.recycle();
         paint = new Paint();
         paint.setAntiAlias(true);
@@ -136,8 +140,9 @@ public class RippleView extends RelativeLayout {
             @Override
             public void onLongPress(MotionEvent event) {
                 super.onLongPress(event);
-                animateRipple(event);
-                sendClickEvent(true);
+                if (!rippleDelayClick || !animationRunning) {
+                    sendClickEvent(true);
+                }
             }
 
             @Override
@@ -171,6 +176,7 @@ public class RippleView extends RelativeLayout {
                     canvas.restore();
                 }
                 invalidate();
+                sendClickEvent(false);
                 if (onCompletionListener != null) onCompletionListener.onComplete(this);
                 return;
             } else
@@ -275,19 +281,38 @@ public class RippleView extends RelativeLayout {
         }
     }
 
+    private Point downPoint;
+    private Point curPoint;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (gestureDetector.onTouchEvent(event)) {
-            animateRipple(event);
-            sendClickEvent(false);
+        View child;
+        if (getChildCount() == 1 && (child = getChildAt(0)) != null && child.isEnabled()) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    downPoint = curPoint = new Point((int) event.getRawX(), (int) event.getRawY());
+                    animateRipple(event);
+                    break;
+                }
+                case MotionEvent.ACTION_MOVE: {
+                    curPoint = new Point((int) event.getRawX(), (int) event.getRawY());
+                    break;
+                }
+            }
+
+            if (gestureDetector.onTouchEvent(event)) {
+                if (!rippleDelayClick) {
+                    sendClickEvent(false);
+                }
+            }
         }
-        return super.onTouchEvent(event);
+        return rippleDelayClick || super.onTouchEvent(event);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         this.onTouchEvent(event);
-        return super.onInterceptTouchEvent(event);
+        return true;
     }
 
     /**
@@ -296,6 +321,9 @@ public class RippleView extends RelativeLayout {
      * @param isLongClick Is the event a long click ?
      */
     private void sendClickEvent(final Boolean isLongClick) {
+        if (downPoint == null || curPoint == null || downPoint.x != curPoint.x || downPoint.y != curPoint.y) {
+            return;
+        }
         if (getParent() instanceof AdapterView) {
             final AdapterView adapterView = (AdapterView) getParent();
             final int position = adapterView.getPositionForView(this);
@@ -306,6 +334,15 @@ public class RippleView extends RelativeLayout {
             } else {
                 if (adapterView.getOnItemClickListener() != null)
                     adapterView.getOnItemClickListener().onItemClick(adapterView, this, position, id);
+            }
+        } else {
+            View child;
+            if (getChildCount() == 1 && (child = getChildAt(0)) != null && child.isEnabled()) {
+                if (isLongClick) {
+                    child.performLongClick();
+                } else {
+                    child.performClick();
+                }
             }
         }
     }
